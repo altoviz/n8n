@@ -5,7 +5,7 @@ class AltovizApi {
     constructor() {
         this.name = 'altovizApi';
         this.displayName = 'Altoviz API';
-        this.icon = 'file:altoviz-logo.svg';
+        this.icon = 'file:../icons/altoviz-logo.svg';
         this.documentationUrl = 'https://altoviz.com';
         this.properties = [
             {

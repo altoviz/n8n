@@ -48,7 +48,7 @@ export class Altoviz implements INodeType {
   description: INodeTypeDescription = {
     displayName: 'Altoviz',
     name: 'altoviz',
-    icon: 'file:altoviz-logo.svg',
+    icon: 'file:../../icons/altoviz-logo.svg',
     group: ['output'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',

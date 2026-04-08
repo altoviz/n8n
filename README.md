@@ -1,5 +1,9 @@
 # @altoviz/n8n-nodes-altoviz
 
+[![CI](https://github.com/altoviz/n8n/actions/workflows/ci.yml/badge.svg)](https://github.com/altoviz/n8n/actions/workflows/ci.yml)
+[![Publish](https://github.com/altoviz/n8n/actions/workflows/publish.yml/badge.svg)](https://github.com/altoviz/n8n/actions/workflows/publish.yml)
+[![npm](https://img.shields.io/npm/v/@altoviz/n8n-nodes-altoviz)](https://www.npmjs.com/package/@altoviz/n8n-nodes-altoviz)
+
 This is an n8n community node package that integrates [Altoviz](https://altoviz.com) with your n8n workflow, so you can create quotes and invoices, extract customers data and more. It provides two nodes — **Altoviz** (action) and **Altoviz Trigger** (webhook) — covering all 20 API resources.
 
 [Altoviz](https://altoviz.com) is a French invoicing and accounting app for small businesses and freelancers.
@@ -99,28 +103,28 @@ You can use a tunnelling tool such as [ngrok](https://ngrok.com/) or [Cloudflare
 
 The node exposes a **Resource** dropdown with 20 resources. Each resource supports one or more operations:
 
-| Resource | Operations |
-|---|---|
-| Bank Account | List Providers |
-| Classification | List |
-| Colleague | Create, Delete, Find, Get, Get By Internal ID, List, Update |
-| Contact | Create, Delete, Find, Get, List, Update |
-| Customer | Create, Delete, Find, Get, Get By Internal ID, Get Contacts, List, Update |
-| Customer Family | Create, Delete, Find, Get, List |
-| Product | Create, Delete, Find, Get, List, Update |
-| Product Family | Create, Delete, Get, List |
-| Product Image | Delete, Get, Upload |
-| Purchase Invoice | Create From File, Download (PDF) |
-| Receipt | Create, Delete, Find, Get, List, Update |
-| Sale Credit | Create, Delete, Download (PDF), Finalize, Find, Get, List, Mark as Refunded, Send, Update |
-| Sale Invoice | Create, Delete, Download (PDF), Finalize, Find, Get, List, Mark as Paid, Send, Update |
-| Sale Quote | Create, Delete, Download (PDF), Find, Get, List, Send |
-| Setting | Get |
-| Supplier | Create, Delete, Find, Get, Get By Internal ID, Get Contacts, List, Update |
-| Unit | List |
-| User | Get Me |
-| VAT | List |
-| Webhook | Create, Delete, List |
+| Resource         | Operations                                                                                |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| Bank Account     | List Providers                                                                            |
+| Classification   | List                                                                                      |
+| Colleague        | Create, Delete, Find, Get, Get By Internal ID, List, Update                               |
+| Contact          | Create, Delete, Find, Get, List, Update                                                   |
+| Customer         | Create, Delete, Find, Get, Get By Internal ID, Get Contacts, List, Update                 |
+| Customer Family  | Create, Delete, Find, Get, List                                                           |
+| Product          | Create, Delete, Find, Get, List, Update                                                   |
+| Product Family   | Create, Delete, Get, List                                                                 |
+| Product Image    | Delete, Get, Upload                                                                       |
+| Purchase Invoice | Create From File, Download (PDF)                                                          |
+| Receipt          | Create, Delete, Find, Get, List, Update                                                   |
+| Sale Credit      | Create, Delete, Download (PDF), Finalize, Find, Get, List, Mark as Refunded, Send, Update |
+| Sale Invoice     | Create, Delete, Download (PDF), Finalize, Find, Get, List, Mark as Paid, Send, Update     |
+| Sale Quote       | Create, Delete, Download (PDF), Find, Get, List, Send                                     |
+| Setting          | Get                                                                                       |
+| Supplier         | Create, Delete, Find, Get, Get By Internal ID, Get Contacts, List, Update                 |
+| Unit             | List                                                                                      |
+| User             | Get Me                                                                                    |
+| VAT              | List                                                                                      |
+| Webhook          | Create, Delete, List                                                                      |
 
 ### Altoviz Trigger node
 
@@ -146,7 +150,7 @@ On activation the node automatically registers a webhook in Altoviz. On deactiva
 
 1. Add the **Altoviz** node to your workflow.
 2. Select **Resource → Sale Invoice** and **Operation → Send**.
-3. Set the **Invoice ID** — for example from a previous *Create* or *Find* step.
+3. Set the **Invoice ID** — for example from a previous _Create_ or _Find_ step.
 4. Connect n8n credentials (**Altoviz API**).
 5. Execute the node.
 
@@ -161,7 +165,7 @@ On activation the node automatically registers a webhook in Altoviz. On deactiva
 ### Reacting to Altoviz events
 
 1. Add the **Altoviz Trigger** node to start your workflow.
-2. Select one or more **Events** (e.g. *Invoice Created*).
+2. Select one or more **Events** (e.g. _Invoice Created_).
 3. Optionally set a **Secret Key** to verify the `X-Altoviz-Signature` header and reject forged requests.
 4. Activate the workflow — the trigger automatically registers a webhook in Altoviz and removes it when deactivated.
 5. Connect downstream nodes to process the event payload (customer ID, invoice number, etc.).
@@ -180,4 +184,5 @@ Requires **n8n v1.x** or later (n8n nodes API version 1). Tested against n8n v1.
 ## Version history
 
 ### 0.9.0
+
 - Initial release — all 20 Altoviz API resources, Altoviz Trigger webhook node

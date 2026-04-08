@@ -1,60 +1,70 @@
-name: Publish to npm
+# Publishes @altoviz/n8n-nodes-altoviz to npm on every version tag push.
+#
+# Release flow (run locally):
+#   npm run release
+#
+# This lints, builds, bumps the version, updates CHANGELOG, commits, tags,
+# and pushes — which triggers this workflow to publish to npm.
+#
+# Tag convention: X.Y.Z  (e.g. 0.2.0)
+#
+# ─── ONE-TIME SETUP ────────────────────────────────────────────────────────
+#
+# Option A — OIDC Trusted Publishing (recommended, no stored secrets):
+#   1. On npmjs.com open the package settings.
+#   2. Publish access → Trusted Publishers → Add a publisher → GitHub Actions:
+#        Repository owner: altoviz
+#        Repository name:  n8n
+#        Workflow name:    publish.yml
+#   3. Leave NPM_TOKEN unset in GitHub secrets.
+#
+# Option B — npm Automation Token (fallback):
+#   1. On npmjs.com generate a Granular Access Token (Automation type).
+#   2. Add it as NPM_TOKEN in GitHub → Settings → Secrets → Actions.
+
+name: Publish
 
 on:
   push:
-    branches:
-      - master
     tags:
-      - 'v*'
+      - '*.*.*'
 
 jobs:
   publish:
+    name: Publish to npm
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: src/@altoviz/n8n-nodes-altoviz
     permissions:
-      contents: read
-      id-token: write  # required for npm provenance
+      contents: write  # push dist/ back to master
+      id-token: write  # mint OIDC token for npm provenance
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # full history required by GitVersion
+          fetch-depth: 0
+          ref: master  # check out branch (not detached tag) so we can push dist
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3
-        with:
-          versionSpec: '6.x'
-
-      - name: Determine version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v3
-        with:
-          configFilePath: src/@altoviz/n8n-nodes-altoviz/GitVersion.yml
-
-      - name: Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-
-      - name: Set package version
-        run: npm version ${{ steps.gitversion.outputs.semVer }} --no-git-tag-version
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Build
-        run: npm run build
-
-      - name: Publish
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Build and commit dist
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-          npm publish --access public --provenance --ignore-scripts
+          npm run build
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dist/
+          git diff --cached --quiet || (git commit -m "chore: update dist [skip ci]" && git push origin master)
+
+      - name: Release
+        run: |
+          [ -n "$NPM_TOKEN" ] && npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+          npm run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 

@@ -24,7 +24,7 @@ class AltovizTrigger {
         this.description = {
             displayName: 'Altoviz Trigger',
             name: 'altovizTrigger',
-            icon: 'file:altoviz-logo.svg',
+            icon: 'file:../../icons/altoviz-logo.svg',
             group: ['trigger'],
             version: 1,
             description: 'Starts the workflow when Altoviz sends a webhook event',

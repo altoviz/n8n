@@ -2,7 +2,7 @@ import type { IAuthenticateGeneric, ICredentialTestRequest, ICredentialType, INo
 export declare class AltovizApi implements ICredentialType {
     name: string;
     displayName: string;
-    icon: "file:altoviz-logo.svg";
+    icon: "file:../icons/altoviz-logo.svg";
     documentationUrl: string;
     properties: INodeProperties[];
     authenticate: IAuthenticateGeneric;

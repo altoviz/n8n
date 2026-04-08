@@ -10,7 +10,7 @@ export class AltovizApi implements ICredentialType {
 
   displayName = 'Altoviz API';
 
-  icon = 'file:altoviz-logo.svg' as const;
+  icon = 'file:../icons/altoviz-logo.svg' as const;
 
   documentationUrl = 'https://altoviz.com';
 
