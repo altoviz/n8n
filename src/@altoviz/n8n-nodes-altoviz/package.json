@@ -16,7 +16,8 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/altoviz/n8n.git"
+        "url": "git+https://github.com/altoviz/n8n.git",
+        "directory": "src/@altoviz/n8n-nodes-altoviz"
     },
    "scripts": {
 		"build": "n8n-node build",
