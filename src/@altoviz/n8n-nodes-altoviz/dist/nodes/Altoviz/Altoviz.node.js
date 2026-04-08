@@ -1,0 +1,110 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Altoviz = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
+const descriptions_1 = require("./descriptions");
+class Altoviz {
+    constructor() {
+        this.description = {
+            displayName: 'Altoviz',
+            name: 'altoviz',
+            icon: 'file:altoviz-logo.svg',
+            group: ['output'],
+            version: 1,
+            subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+            description: 'Invoicing app for small businesses',
+            defaults: {
+                name: 'Altoviz',
+            },
+            usableAsTool: true,
+            inputs: [n8n_workflow_1.NodeConnectionTypes.Main],
+            outputs: [n8n_workflow_1.NodeConnectionTypes.Main],
+            credentials: [
+                {
+                    name: 'altovizApi',
+                    required: true,
+                },
+            ],
+            requestDefaults: {
+                baseURL: 'https://api.altoviz.com',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            },
+            properties: [
+                {
+                    displayName: 'Resource',
+                    name: 'resource',
+                    type: 'options',
+                    noDataExpression: true,
+                    options: [
+                        { name: 'Bank Account', value: 'bankAccount' },
+                        { name: 'Classification', value: 'classification' },
+                        { name: 'Colleague', value: 'colleague' },
+                        { name: 'Contact', value: 'contact' },
+                        { name: 'Customer', value: 'customer' },
+                        { name: 'Customer Family', value: 'customerFamily' },
+                        { name: 'Product', value: 'product' },
+                        { name: 'Product Family', value: 'productFamily' },
+                        { name: 'Product Image', value: 'productImage' },
+                        { name: 'Purchase Invoice', value: 'purchaseInvoice' },
+                        { name: 'Receipt', value: 'receipt' },
+                        { name: 'Sale Credit', value: 'saleCredit' },
+                        { name: 'Sale Invoice', value: 'saleInvoice' },
+                        { name: 'Sale Quote', value: 'saleQuote' },
+                        { name: 'Setting', value: 'setting' },
+                        { name: 'Supplier', value: 'supplier' },
+                        { name: 'Unit', value: 'unit' },
+                        { name: 'User', value: 'user' },
+                        { name: 'VAT', value: 'vat' },
+                        { name: 'Webhook', value: 'webhook' },
+                    ],
+                    default: 'customer',
+                },
+                ...descriptions_1.bankAccountOperations,
+                ...descriptions_1.bankAccountFields,
+                ...descriptions_1.classificationOperations,
+                ...descriptions_1.classificationFields,
+                ...descriptions_1.colleagueOperations,
+                ...descriptions_1.colleagueFields,
+                ...descriptions_1.contactOperations,
+                ...descriptions_1.contactFields,
+                ...descriptions_1.customerOperations,
+                ...descriptions_1.customerFields,
+                ...descriptions_1.customerFamilyOperations,
+                ...descriptions_1.customerFamilyFields,
+                ...descriptions_1.productOperations,
+                ...descriptions_1.productFields,
+                ...descriptions_1.productFamilyOperations,
+                ...descriptions_1.productFamilyFields,
+                ...descriptions_1.productImageOperations,
+                ...descriptions_1.productImageFields,
+                ...descriptions_1.purchaseInvoiceOperations,
+                ...descriptions_1.purchaseInvoiceFields,
+                ...descriptions_1.receiptOperations,
+                ...descriptions_1.receiptFields,
+                ...descriptions_1.saleCreditOperations,
+                ...descriptions_1.saleCreditFields,
+                ...descriptions_1.saleInvoiceOperations,
+                ...descriptions_1.saleInvoiceFields,
+                ...descriptions_1.saleQuoteOperations,
+                ...descriptions_1.saleQuoteFields,
+                ...descriptions_1.settingOperations,
+                ...descriptions_1.settingFields,
+                ...descriptions_1.supplierOperations,
+                ...descriptions_1.supplierFields,
+                ...descriptions_1.unitOperations,
+                ...descriptions_1.unitFields,
+                ...descriptions_1.userOperations,
+                ...descriptions_1.userFields,
+                ...descriptions_1.vatOperations,
+                ...descriptions_1.vatFields,
+                ...descriptions_1.webhookOperations,
+                ...descriptions_1.webhookFields,
+            ],
+        };
+    }
+}
+exports.Altoviz = Altoviz;
+//# sourceMappingURL=Altoviz.node.js.map

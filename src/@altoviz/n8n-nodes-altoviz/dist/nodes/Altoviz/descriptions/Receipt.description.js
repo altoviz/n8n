@@ -1,0 +1,306 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.receiptFields = exports.receiptOperations = void 0;
+exports.receiptOperations = [
+    {
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+        noDataExpression: true,
+        displayOptions: { show: { resource: ['receipt'] } },
+        options: [
+            {
+                name: 'Create',
+                value: 'create',
+                description: 'Create a new receipt',
+                action: 'Create a receipt',
+                routing: { request: { method: 'POST', url: '/v1/Receipts' } },
+            },
+            {
+                name: 'Delete',
+                value: 'delete',
+                description: 'Delete a receipt',
+                action: 'Delete a receipt',
+                routing: { request: { method: 'DELETE', url: '=/v1/Receipts/{{$parameter["id"]}}' } },
+            },
+            {
+                name: 'Find',
+                value: 'find',
+                description: 'Find a receipt by internal ID',
+                action: 'Find a receipt',
+                routing: { request: { method: 'GET', url: '/v1/Receipts/Find' } },
+            },
+            {
+                name: 'Get',
+                value: 'get',
+                description: 'Get a receipt by ID',
+                action: 'Get a receipt',
+                routing: { request: { method: 'GET', url: '=/v1/Receipts/{{$parameter["id"]}}' } },
+            },
+            {
+                name: 'List',
+                value: 'list',
+                description: 'List receipts',
+                action: 'List receipts',
+                routing: { request: { method: 'GET', url: '/v1/Receipts' } },
+            },
+            {
+                name: 'Update',
+                value: 'update',
+                description: 'Update a receipt',
+                action: 'Update a receipt',
+                routing: { request: { method: 'PUT', url: '=/v1/Receipts/{{$parameter["id"]}}' } },
+            },
+        ],
+        default: 'list',
+    },
+];
+exports.receiptFields = [
+    {
+        displayName: 'Receipt ID',
+        name: 'id',
+        type: 'number',
+        required: true,
+        default: 0,
+        displayOptions: { show: { resource: ['receipt'], operation: ['get', 'update', 'delete'] } },
+    },
+    {
+        displayName: 'Internal ID',
+        name: 'internalId',
+        type: 'string',
+        required: true,
+        default: '',
+        displayOptions: { show: { resource: ['receipt'], operation: ['find'] } },
+        routing: { request: { qs: { internalId: '={{$value}}' } } },
+    },
+    {
+        displayName: 'Options',
+        name: 'options',
+        type: 'collection',
+        placeholder: 'Add Option',
+        default: {},
+        displayOptions: { show: { resource: ['receipt'], operation: ['list'] } },
+        options: [
+            {
+                displayName: 'Order By',
+                name: 'OrderBy',
+                type: 'string',
+                default: '',
+                routing: { request: { qs: { OrderBy: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Page Index',
+                name: 'PageIndex',
+                type: 'number',
+                default: 0,
+                routing: { request: { qs: { PageIndex: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Page Size',
+                name: 'PageSize',
+                type: 'number',
+                default: 50,
+                routing: { request: { qs: { PageSize: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Search Query',
+                name: 'query',
+                type: 'string',
+                default: '',
+                routing: { request: { qs: { query: '={{$value}}' } } },
+            },
+        ],
+    },
+    {
+        displayName: 'Amount',
+        name: 'amount',
+        type: 'number',
+        required: true,
+        default: 0,
+        displayOptions: { show: { resource: ['receipt'], operation: ['create'] } },
+        routing: { request: { body: { amount: '={{$value}}' } } },
+    },
+    {
+        displayName: 'Date',
+        name: 'date',
+        type: 'dateTime',
+        required: true,
+        default: '',
+        displayOptions: { show: { resource: ['receipt'], operation: ['create'] } },
+        routing: { request: { body: { date: '={{$value}}' } } },
+    },
+    {
+        displayName: 'Payment Method',
+        name: 'paymentMethod',
+        type: 'options',
+        required: true,
+        default: 'Transfer',
+        displayOptions: { show: { resource: ['receipt'], operation: ['create'] } },
+        options: [
+            { name: 'Bill', value: 'Bill' },
+            { name: 'Card', value: 'Card' },
+            { name: 'Cash', value: 'Cash' },
+            { name: 'Check', value: 'Check' },
+            { name: 'Order', value: 'Order' },
+            { name: 'Other', value: 'Other' },
+            { name: 'Transfer', value: 'Transfer' },
+            { name: 'Usec', value: 'Usec' },
+        ],
+        routing: { request: { body: { paymentMethod: '={{$value}}' } } },
+    },
+    {
+        displayName: 'Additional Fields',
+        name: 'additionalFields',
+        type: 'collection',
+        placeholder: 'Add Field',
+        default: {},
+        displayOptions: { show: { resource: ['receipt'], operation: ['create', 'update'] } },
+        options: [
+            {
+                displayName: 'Amount',
+                name: 'amount',
+                type: 'number',
+                default: 0,
+                routing: { request: { body: { amount: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Customer ID',
+                name: 'customerId',
+                type: 'number',
+                default: 0,
+                routing: { request: { body: { customerId: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Customer Internal ID',
+                name: 'customerInternalId',
+                type: 'string',
+                default: '',
+                routing: { request: { body: { customerInternalId: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Customer Number',
+                name: 'customerNumber',
+                type: 'string',
+                default: '',
+                routing: { request: { body: { customerNumber: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Date',
+                name: 'date',
+                type: 'dateTime',
+                default: '',
+                routing: { request: { body: { date: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Internal ID',
+                name: 'internalId',
+                type: 'string',
+                default: '',
+                routing: { request: { body: { internalId: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Notes',
+                name: 'notes',
+                type: 'string',
+                default: '',
+                routing: { request: { body: { notes: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Payment Method',
+                name: 'paymentMethod',
+                type: 'options',
+                default: 'Transfer',
+                options: [
+                    { name: 'Bill', value: 'Bill' },
+                    { name: 'Card', value: 'Card' },
+                    { name: 'Cash', value: 'Cash' },
+                    { name: 'Check', value: 'Check' },
+                    { name: 'Order', value: 'Order' },
+                    { name: 'Other', value: 'Other' },
+                    { name: 'Transfer', value: 'Transfer' },
+                    { name: 'Usec', value: 'Usec' },
+                ],
+                routing: { request: { body: { paymentMethod: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Reference',
+                name: 'reference',
+                type: 'string',
+                default: '',
+                routing: { request: { body: { reference: '={{$value}}' } } },
+            },
+            {
+                displayName: 'Status',
+                name: 'status',
+                type: 'options',
+                default: 'Success',
+                options: [
+                    { name: 'Failed', value: 'Failed' },
+                    { name: 'Pending', value: 'Pending' },
+                    { name: 'Success', value: 'Success' },
+                ],
+                routing: { request: { body: { status: '={{$value}}' } } },
+            },
+        ],
+    },
+    {
+        displayName: 'Links',
+        name: 'links',
+        type: 'fixedCollection',
+        typeOptions: { multipleValues: true },
+        placeholder: 'Add Link',
+        default: {},
+        description: 'Links to associate with the receipt (e.g. invoices to mark as paid)',
+        displayOptions: { show: { resource: ['receipt'], operation: ['create', 'update'] } },
+        options: [
+            {
+                displayName: 'Link',
+                name: 'link',
+                values: [
+                    {
+                        displayName: 'Document ID',
+                        name: 'id',
+                        type: 'number',
+                        required: true,
+                        default: 0,
+                        description: 'ID of the linked document',
+                    },
+                    {
+                        displayName: 'Type',
+                        name: 'type',
+                        type: 'options',
+                        required: true,
+                        default: 'Invoice',
+                        options: [
+                            { name: 'Commitment', value: 'Commitment' },
+                            { name: 'Credit', value: 'Credit' },
+                            { name: 'Invoice', value: 'Invoice' },
+                        ],
+                    },
+                    {
+                        displayName: 'Amount',
+                        name: 'amount',
+                        type: 'number',
+                        default: 0,
+                        description: 'Amount to apply to this linked document',
+                    },
+                ],
+            },
+        ],
+        routing: {
+            send: {
+                preSend: [
+                    async function (requestOptions) {
+                        var _a;
+                        const links = (_a = this.getNodeParameter('links')) === null || _a === void 0 ? void 0 : _a.link;
+                        if (links === null || links === void 0 ? void 0 : links.length) {
+                            requestOptions.body.links = links;
+                        }
+                        return requestOptions;
+                    },
+                ],
+            },
+        },
+    },
+];
+//# sourceMappingURL=Receipt.description.js.map
