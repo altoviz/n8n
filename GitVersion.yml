@@ -14,7 +14,7 @@ no-bump-message: '(\+semver:\s?(none|skip)|^Merge branch)'
 commit-message-incrementing: Enabled
 
 branches:
-  main:
+  master:
     increment: Patch
     prevent-increment:
       of-merged-branch: true
