@@ -8,23 +8,7 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionTypes } from 'n8n-workflow';
 
-const EVENT_TYPE_OPTIONS = [
-  { name: 'Contact Created', value: 'ContactCreated' },
-  { name: 'Contact Deleted', value: 'ContactDeleted' },
-  { name: 'Contact Updated', value: 'ContactUpdated' },
-  { name: 'Customer Created', value: 'CustomerCreated' },
-  { name: 'Customer Deleted', value: 'CustomerDeleted' },
-  { name: 'Customer Updated', value: 'CustomerUpdated' },
-  { name: 'Invoice Created', value: 'InvoiceCreated' },
-  { name: 'Invoice Deleted', value: 'InvoiceDeleted' },
-  { name: 'Invoice Updated', value: 'InvoiceUpdated' },
-  { name: 'Product Created', value: 'ProductCreated' },
-  { name: 'Product Deleted', value: 'ProductDeleted' },
-  { name: 'Product Updated', value: 'ProductUpdated' },
-  { name: 'Quote Created', value: 'QuoteCreated' },
-  { name: 'Quote Deleted', value: 'QuoteDeleted' },
-  { name: 'Quote Updated', value: 'QuoteUpdated' },
-];
+const WEBHOOKS_ENDPOINT = 'https://api.altoviz.com/v1/Webhooks';
 
 export class AltovizTrigger implements INodeType {
   description: INodeTypeDescription = {
@@ -33,10 +17,12 @@ export class AltovizTrigger implements INodeType {
     icon: 'file:../../icons/altoviz-logo.svg',
     group: ['trigger'],
     version: 1,
-    description: 'Starts the workflow when Altoviz sends a webhook event',
+    subtitle: '={{ $parameter["events"].join(", ") }}',
+    description: 'Starts the workflow when an Altoviz event occurs',
     defaults: {
       name: 'Altoviz Trigger',
     },
+    usableAsTool: true,
     inputs: [],
     outputs: [NodeConnectionTypes.Main],
     credentials: [
@@ -60,16 +46,33 @@ export class AltovizTrigger implements INodeType {
         type: 'multiOptions',
         required: true,
         default: [],
-        description: 'The Altoviz events that will trigger this workflow',
-        options: EVENT_TYPE_OPTIONS,
+        description: 'The events that will trigger this workflow',
+        options: [
+          { name: 'Contact Created', value: 'ContactCreated' },
+          { name: 'Contact Deleted', value: 'ContactDeleted' },
+          { name: 'Contact Updated', value: 'ContactUpdated' },
+          { name: 'Customer Created', value: 'CustomerCreated' },
+          { name: 'Customer Deleted', value: 'CustomerDeleted' },
+          { name: 'Customer Updated', value: 'CustomerUpdated' },
+          { name: 'Invoice Created', value: 'InvoiceCreated' },
+          { name: 'Invoice Deleted', value: 'InvoiceDeleted' },
+          { name: 'Invoice Updated', value: 'InvoiceUpdated' },
+          { name: 'Product Created', value: 'ProductCreated' },
+          { name: 'Product Deleted', value: 'ProductDeleted' },
+          { name: 'Product Updated', value: 'ProductUpdated' },
+          { name: 'Quote Created', value: 'QuoteCreated' },
+          { name: 'Quote Deleted', value: 'QuoteDeleted' },
+          { name: 'Quote Updated', value: 'QuoteUpdated' },
+        ],
       },
       {
         displayName: 'Webhook Name',
         name: 'webhookName',
         type: 'string',
-        required: true,
-        default: 'n8n',
-        description: 'Label shown in the Altoviz webhook list',
+        default: '',
+        placeholder: 'e.g. n8n-altoviz',
+        description:
+          'Label shown in the Altoviz webhook list. Defaults to n8n if left blank.',
       },
       {
         displayName: 'Secret Key',
@@ -81,7 +84,6 @@ export class AltovizTrigger implements INodeType {
           'Optional secret used by Altoviz to sign payloads. If set, verify the X-Altoviz-Signature header in your workflow.',
       },
     ],
-    usableAsTool: true,
   };
 
   webhookMethods = {
@@ -91,17 +93,14 @@ export class AltovizTrigger implements INodeType {
         const webhookId = webhookData.webhookId as number | undefined;
         if (!webhookId) return false;
 
-        const endpoint = 'https://api.altoviz.com/v1/Webhooks';
         try {
           const registeredWebhooks = await this.helpers.httpRequestWithAuthentication.call(
             this,
             'altovizApi',
-            { method: 'GET', url: endpoint, json: true },
+            { method: 'GET', url: WEBHOOKS_ENDPOINT, json: true },
           );
           if (Array.isArray(registeredWebhooks)) {
-            return registeredWebhooks.some(
-              (wh: { id: number }) => wh.id === webhookId,
-            );
+            return registeredWebhooks.some((wh: { id: number }) => wh.id === webhookId);
           }
         } catch {
           return false;
@@ -112,7 +111,7 @@ export class AltovizTrigger implements INodeType {
       async create(this: IHookFunctions): Promise<boolean> {
         const webhookUrl = this.getNodeWebhookUrl('default') as string;
         const events = this.getNodeParameter('events') as string[];
-        const webhookName = this.getNodeParameter('webhookName') as string;
+        const webhookName = (this.getNodeParameter('webhookName') as string) || 'n8n';
         const secretKey = this.getNodeParameter('secretKey') as string;
 
         const body: Record<string, unknown> = {
@@ -129,7 +128,7 @@ export class AltovizTrigger implements INodeType {
           'altovizApi',
           {
             method: 'POST',
-            url: 'https://api.altoviz.com/v1/Webhooks',
+            url: WEBHOOKS_ENDPOINT,
             json: true,
             body,
           },
@@ -151,7 +150,7 @@ export class AltovizTrigger implements INodeType {
             'altovizApi',
             {
               method: 'DELETE',
-              url: 'https://api.altoviz.com/v1/Webhooks',
+              url: WEBHOOKS_ENDPOINT,
               qs: { id: webhookId },
               json: true,
             },
@@ -167,10 +166,13 @@ export class AltovizTrigger implements INodeType {
   };
 
   async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-    const bodyData = this.getBodyData();
-
+    const body = this.getBodyData() as { type?: string; data?: IDataObject };
+    const output: IDataObject = {
+      eventType: body.type ?? '',
+      ...(body.data ?? {}),
+    };
     return {
-      workflowData: [[{ json: bodyData as IDataObject }]],
+      workflowData: [[{ json: output }]],
     };
   }
 }
