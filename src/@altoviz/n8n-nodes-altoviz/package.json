@@ -1,19 +1,22 @@
 {
     "name": "@altoviz/n8n-nodes-altoviz",
     "version": "0.1.0",
-    "description": "n8n community node for the Altoviz API",
+    "description": "n8n community node for the Altoviz app",
     "license": "MIT",
-    "homepage": "",
+    "homepage": "https://altoviz.com",
     "keywords": [
-        "n8n-community-node-package"
+        "n8n-community-node-package",
+        "altoviz",
+        "n8n",
+        "invoicing"
     ],
     "author": {
-        "name": "alex.danvy",
-        "email": "alex.danvy@altoviz.com"
+        "name": "adanvy",
+        "email": "contact@altoviz.com"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/altoviz/n8n-nodes-altoviz.git"
+        "url": "git+https://github.com/altoviz/n8n.git"
     },
    "scripts": {
 		"build": "n8n-node build",
