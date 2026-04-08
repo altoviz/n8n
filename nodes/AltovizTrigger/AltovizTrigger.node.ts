@@ -91,7 +91,8 @@ export class AltovizTrigger implements INodeType {
       async checkExists(this: IHookFunctions): Promise<boolean> {
         const webhookData = this.getWorkflowStaticData('node');
         const webhookId = webhookData.webhookId as number | undefined;
-        if (!webhookId) return false;
+        const webhookUrl = this.getNodeWebhookUrl('default') as string;
+        const events = this.getNodeParameter('events') as string[];
 
         try {
           const registeredWebhooks = await this.helpers.httpRequestWithAuthentication.call(
@@ -100,7 +101,29 @@ export class AltovizTrigger implements INodeType {
             { method: 'GET', url: WEBHOOKS_ENDPOINT, json: true },
           );
           if (Array.isArray(registeredWebhooks)) {
-            return registeredWebhooks.some((wh: { id: number }) => wh.id === webhookId);
+            const existing = (
+              registeredWebhooks as Array<{ id: number; url: string; types: string[] }>
+            ).find((wh) => wh.id === webhookId || wh.url === webhookUrl);
+
+            if (!existing) return false;
+
+            const typesMatch =
+              existing.types.length === events.length &&
+              events.every((e) => existing.types.includes(e));
+
+            if (typesMatch) {
+              webhookData.webhookId = existing.id;
+              return true;
+            }
+
+            // Types changed — delete stale webhook so create() registers a fresh one
+            await this.helpers.httpRequestWithAuthentication.call(this, 'altovizApi', {
+              method: 'DELETE',
+              url: WEBHOOKS_ENDPOINT,
+              qs: { id: existing.id },
+              json: true,
+            });
+            delete webhookData.webhookId;
           }
         } catch {
           return false;
