@@ -14,7 +14,8 @@ no-bump-message: '(\+semver:\s?(none|skip)|^Merge branch)'
 commit-message-incrementing: Enabled
 
 branches:
-  master:
+  main:
+    regex: '^master$'
     increment: Patch
     prevent-increment:
       of-merged-branch: true
@@ -29,11 +30,11 @@ branches:
     increment: Patch
     is-release-branch: true
     source-branches:
-      - master
+      - main
   pull-request:
     label: 'PullRequest{Number}'
     increment: Inherit
     source-branches:
-      - master
+      - main
       - feature
       - release
