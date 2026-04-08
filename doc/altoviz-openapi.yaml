@@ -1,0 +1,5705 @@
+openapi: 3.0.1
+info:
+  title: Altoviz API
+  description: RESTful APIs for the Altoviz services
+  contact:
+    name: Altoviz
+    email: contact@altoviz.com
+  license:
+    name: Altoviz license
+    url: https://altoviz.com/license
+  version: v1
+  x-logo:
+    url: https://altoviz.com/altoviz-logo-ext-violet-262x72.png
+    altText: Altoviz logo
+servers:
+  - url: https://api.altoviz.com
+    description: Altoviz
+paths:
+  /v1/BankAccounts/Providers:
+    get:
+      tags:
+        - BankAccounts
+      summary: List of supported bank account providers
+      operationId: GET_BankAccounts_Providers
+      parameters:
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BankProvider"
+  /v1/Classifications:
+    get:
+      tags:
+        - Classifications
+      summary: List all classifications
+      operationId: GET_Classifications_List
+      parameters:
+        - name: type
+          in: query
+          description: Classification Type
+          schema:
+            $ref: "#/components/schemas/ClassificationType"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Classification"
+  /v1/Colleagues:
+    get:
+      tags:
+        - Colleagues
+      summary: List colleagues
+      operationId: GET_Colleagues_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Colleague"
+    post:
+      tags:
+        - Colleagues
+      summary: Create a new colleague
+      operationId: POST_Colleagues_Post
+      requestBody:
+        description: Colleague to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Colleague"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/Colleagues/Find:
+    get:
+      tags:
+        - Colleagues
+      summary: Find a colleague
+      operationId: GET_Colleagues_Find
+      parameters:
+        - name: email
+          in: query
+          description: Colleague email
+          schema:
+            type: string
+        - name: internalId
+          in: query
+          description: Colleague internal ID
+          schema:
+            type: string
+        - name: number
+          in: query
+          description: Colleague internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Colleague"
+  /v1/Colleagues/GetByInternalId/{internalId}:
+    get:
+      tags:
+        - Colleagues
+      summary: Find a single colleague by its internal ID
+      operationId: GET_Colleagues_GetByInternalId
+      parameters:
+        - name: internalId
+          in: path
+          description: Colleague internal ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Colleague"
+  /v1/Colleagues/{id}:
+    get:
+      tags:
+        - Colleagues
+      summary: Get a colleague by ID
+      operationId: GET_Colleagues_Get
+      parameters:
+        - name: id
+          in: path
+          description: Colleague id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Colleague"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Colleagues
+      summary: Update a colleague
+      operationId: PUT_Colleagues_Update
+      parameters:
+        - name: id
+          in: path
+          description: Colleague ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Colleague"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Colleague"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Colleagues
+      summary: Delete a colleague
+      operationId: DELETE_Colleagues_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Colleague id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Contacts:
+    get:
+      tags:
+        - Contacts
+      summary: List Contacts
+      operationId: GET_Contacts_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+    post:
+      tags:
+        - Contacts
+      summary: Create a new Contact
+      operationId: POST_Contacts_Post
+      requestBody:
+        description: Contact to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/Contacts/Find:
+    get:
+      tags:
+        - Contacts
+      summary: Find a Contact
+      operationId: GET_Contacts_Find
+      parameters:
+        - name: email
+          in: query
+          description: Email
+          schema:
+            type: string
+        - name: internalId
+          in: query
+          description: Internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+  /v1/Contacts/{id}:
+    get:
+      tags:
+        - Contacts
+      summary: Get a Contact by ID
+      operationId: GET_Contacts_Get
+      parameters:
+        - name: id
+          in: path
+          description: Contact id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Contacts
+      summary: Update a Contact
+      operationId: PUT_Contacts_Update
+      parameters:
+        - name: id
+          in: path
+          description: Contact ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Contacts
+      summary: Delete a Contact
+      operationId: DELETE_Contacts_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Contact id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+  /v1/CustomerFamilies:
+    get:
+      tags:
+        - CustomerFamilies
+      summary: List customer families
+      operationId: GET_CustomerFamilies_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerFamily"
+    post:
+      tags:
+        - CustomerFamilies
+      summary: Create a new customer family
+      operationId: POST_CustomerFamilies_Post
+      requestBody:
+        description: Customer family to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/CustomerFamily"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerFamily"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/CustomerFamily"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/CustomerFamily"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerFamily"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/CustomerFamilies/Find:
+    get:
+      tags:
+        - CustomerFamilies
+      summary: Find a customer family
+      operationId: GET_CustomerFamilies_Find
+      parameters:
+        - name: number
+          in: query
+          description: Number
+          schema:
+            type: string
+        - name: internalId
+          in: query
+          description: Internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerFamily"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/CustomerFamilies/{id}:
+    get:
+      tags:
+        - CustomerFamilies
+      summary: Get a customer family by ID
+      operationId: GET_CustomerFamilies_Get
+      parameters:
+        - name: id
+          in: path
+          description: Customer family id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerFamily"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - CustomerFamilies
+      summary: Delete a customer family
+      operationId: DELETE_CustomerFamilies_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Customer family id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Customers:
+    get:
+      tags:
+        - Customers
+      summary: List customers
+      operationId: GET_Customers_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+    post:
+      tags:
+        - Customers
+      summary: Create a new customer
+      operationId: POST_Customers_Post
+      requestBody:
+        description: Customer to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/Customers/Find:
+    get:
+      tags:
+        - Customers
+      summary: Find a customer
+      operationId: GET_Customers_Find
+      parameters:
+        - name: email
+          in: query
+          description: Customer email
+          schema:
+            type: string
+        - name: internalId
+          in: query
+          description: Customer internal ID
+          schema:
+            type: string
+        - name: number
+          in: query
+          description: Customer internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+  /v1/Customers/GetByInternalId/{internalId}:
+    get:
+      tags:
+        - Customers
+      summary: Find a single customer by its internal ID
+      operationId: GET_Customers_GetByInternalId
+      parameters:
+        - name: internalId
+          in: path
+          description: Customer internal ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+  /v1/Customers/{id}:
+    get:
+      tags:
+        - Customers
+      summary: Get a customer by ID
+      operationId: GET_Customers_Get
+      parameters:
+        - name: id
+          in: path
+          description: Customer id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Customers
+      summary: Update a customer
+      operationId: PUT_Customers_Update
+      parameters:
+        - name: id
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Customers
+      summary: Delete a customer
+      operationId: DELETE_Customers_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Customer id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Customers/{id}/contacts:
+    get:
+      tags:
+        - Customers
+      summary: Get customer contacts
+      operationId: GET_Customers_GetContacts
+      parameters:
+        - name: id
+          in: path
+          description: Customer id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ThirdContact"
+  /Hello:
+    get:
+      tags:
+        - Hello
+      summary: Say hello to test api key
+      operationId: GET_Hello_Get
+      parameters:
+        - name: api-version
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Hello"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hello"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Hello"
+        "401":
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/ProductFamilies:
+    get:
+      tags:
+        - ProductFamilies
+      summary: List product families
+      operationId: GET_ProductFamilies_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductFamily"
+    post:
+      tags:
+        - ProductFamilies
+      summary: Create a new product family
+      operationId: POST_ProductFamilies_Post
+      requestBody:
+        description: Product family to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/ProductFamily"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductFamily"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/ProductFamily"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/ProductFamily"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductFamily"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/ProductFamilies/{id}:
+    get:
+      tags:
+        - ProductFamilies
+      summary: Get a product family by ID
+      operationId: GET_ProductFamilies_Get
+      parameters:
+        - name: id
+          in: path
+          description: Product family id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductFamily"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - ProductFamilies
+      summary: Delete a product family
+      operationId: DELETE_ProductFamilies_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Product family id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/ProductImages/{productId}:
+    post:
+      tags:
+        - ProductImages
+      summary: Add or update the product image
+      operationId: POST_ProductImages_Post
+      parameters:
+        - name: productId
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                ContentType:
+                  type: string
+                ContentDisposition:
+                  type: string
+                Headers:
+                  type: object
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                Length:
+                  type: integer
+                  format: int64
+                Name:
+                  type: string
+                FileName:
+                  type: string
+            encoding:
+              ContentType:
+                style: form
+              ContentDisposition:
+                style: form
+              Headers:
+                style: form
+              Length:
+                style: form
+              Name:
+                style: form
+              FileName:
+                style: form
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      tags:
+        - ProductImages
+      summary: Get a product image
+      operationId: GET_ProductImages_Get
+      parameters:
+        - name: productId
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/ProductImages/{id}:
+    delete:
+      tags:
+        - ProductImages
+      summary: Delete a product image
+      operationId: DELETE_ProductImages_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Products:
+    get:
+      tags:
+        - Products
+      summary: List products
+      operationId: GET_Products_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+        - name: familyId
+          in: query
+          description: Family ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      operationId: POST_Products_Post
+      requestBody:
+        description: Product to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Product"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/Products/Find:
+    get:
+      tags:
+        - Products
+      summary: Find a product
+      operationId: GET_Products_Find
+      parameters:
+        - name: number
+          in: query
+          description: Number
+          schema:
+            type: string
+        - name: internalId
+          in: query
+          description: Internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Get a product by ID
+      operationId: GET_Products_Get
+      parameters:
+        - name: id
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Products
+      summary: Update a product
+      operationId: PUT_Products_Update
+      parameters:
+        - name: id
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Product"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Products
+      summary: Delete a product
+      operationId: DELETE_Products_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/PurchaseInvoices/file:
+    post:
+      tags:
+        - PurchaseInvoices
+      summary: Creates new purchase invoice from file
+      operationId: POST_PurchaseInvoices_CreateFromFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                ContentType:
+                  type: string
+                ContentDisposition:
+                  type: string
+                Headers:
+                  type: object
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                Length:
+                  type: integer
+                  format: int64
+                Name:
+                  type: string
+                FileName:
+                  type: string
+            encoding:
+              ContentType:
+                style: form
+              ContentDisposition:
+                style: form
+              Headers:
+                style: form
+              Length:
+                style: form
+              Name:
+                style: form
+              FileName:
+                style: form
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseInvoice"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/PurchaseInvoices/Download/{id}:
+    get:
+      tags:
+        - PurchaseInvoices
+      summary: Download the invoice as a PDF file
+      operationId: GET_PurchaseInvoices_Download
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Receipts:
+    get:
+      tags:
+        - Receipts
+      summary: List receipts
+      operationId: GET_Receipts_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Receipt"
+    post:
+      tags:
+        - Receipts
+      summary: Create a new receipt
+      operationId: POST_Receipts_Post
+      requestBody:
+        description: Receipt to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/Receipts/Find:
+    get:
+      tags:
+        - Receipts
+      summary: Find a receipt by internal ID
+      operationId: GET_Receipts_Find
+      parameters:
+        - name: internalId
+          in: query
+          description: Customer internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+  /v1/Receipts/{id}:
+    get:
+      tags:
+        - Receipts
+      summary: Get a receipt by ID
+      operationId: GET_Receipts_Get
+      parameters:
+        - name: id
+          in: path
+          description: Receipt id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Receipts
+      summary: Update a receipt
+      operationId: PUT_Receipts_Update
+      parameters:
+        - name: id
+          in: path
+          description: Receipt ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Receipts
+      summary: Delete a receipt
+      operationId: DELETE_Receipts_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Receipt id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleCredits:
+    get:
+      tags:
+        - SaleCredits
+      summary: List credits
+      operationId: GET_SaleCredits_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: From
+          in: query
+          description: From
+          schema:
+            type: string
+            format: date
+        - name: To
+          in: query
+          description: To
+          schema:
+            type: string
+            format: date
+        - name: CustomerId
+          in: query
+          description: Customer ID
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credit"
+    post:
+      tags:
+        - SaleCredits
+      summary: Create a new draft credit
+      operationId: POST_SaleCredits_Post
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+  /v1/SaleCredits/{id}:
+    get:
+      tags:
+        - SaleCredits
+      summary: Get an credit by ID
+      operationId: GET_SaleCredits_Get
+      parameters:
+        - name: id
+          in: path
+          description: Credit ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Error"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - SaleCredits
+      summary: Update a draft credit
+      operationId: PUT_SaleCredits_Put
+      parameters:
+        - name: id
+          in: path
+          description: Credit ID>
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Credit"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+    delete:
+      tags:
+        - SaleCredits
+      summary: Delete a draft credit
+      operationId: DELETE_SaleCredits_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Draft credit ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "400":
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleCredits/Find:
+    get:
+      tags:
+        - SaleCredits
+      summary: Find credits
+      operationId: GET_SaleCredits_Find
+      parameters:
+        - name: internalId
+          in: query
+          description: Credit internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credit"
+  /v1/SaleCredits/Finalize/{id}:
+    post:
+      tags:
+        - SaleCredits
+      summary: Finalize a draft credit
+      operationId: POST_SaleCredits_Finalize
+      parameters:
+        - name: id
+          in: path
+          description: Draft credit ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleCredits/Download/{id}:
+    get:
+      tags:
+        - SaleCredits
+      summary: Download the credit as a PDF file
+      operationId: GET_SaleCredits_Download
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleCredits/Send/{id}:
+    post:
+      tags:
+        - SaleCredits
+      summary: Send an credit
+      operationId: POST_SaleCredits_Send
+      parameters:
+        - name: id
+          in: path
+          description: Credit ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: Email addresses
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+          text/json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleCredits/MarkAsRefunded:
+    post:
+      tags:
+        - SaleCredits
+      summary: Mark credit as refunded
+      operationId: POST_SaleCredits_MarkAsRefunded
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/RefundCredit"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefundCredit"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/RefundCredit"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/RefundCredit"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Credit"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleInvoices:
+    get:
+      tags:
+        - SaleInvoices
+      summary: List invoices
+      operationId: GET_SaleInvoices_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: From
+          in: query
+          description: From
+          schema:
+            type: string
+            format: date
+        - name: To
+          in: query
+          description: To
+          schema:
+            type: string
+            format: date
+        - name: CustomerId
+          in: query
+          description: Customer ID
+          schema:
+            type: integer
+            format: int32
+        - name: Status
+          in: query
+          description: Status
+          schema:
+            $ref: "#/components/schemas/InvoiceStatusFilter"
+        - name: IncludeCancelled
+          in: query
+          description: Indicates whether cancelled invoices should be included
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+    post:
+      tags:
+        - SaleInvoices
+      summary: Create a new draft invoice
+      operationId: POST_SaleInvoices_Post
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+  /v1/SaleInvoices/{id}:
+    get:
+      tags:
+        - SaleInvoices
+      summary: Get an invoice by ID
+      operationId: GET_SaleInvoices_Get
+      parameters:
+        - name: id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Error"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - SaleInvoices
+      summary: Update a draft invoice
+      operationId: PUT_SaleInvoices_Put
+      parameters:
+        - name: id
+          in: path
+          description: Invoice ID>
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+    delete:
+      tags:
+        - SaleInvoices
+      summary: Delete a draft invoice
+      operationId: DELETE_SaleInvoices_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Draft invoice ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "400":
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleInvoices/Find:
+    get:
+      tags:
+        - SaleInvoices
+      summary: Find invoices
+      operationId: GET_SaleInvoices_Find
+      parameters:
+        - name: internalId
+          in: query
+          description: Invoice internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+  /v1/SaleInvoices/Finalize/{id}:
+    post:
+      tags:
+        - SaleInvoices
+      summary: Finalize a draft invoice
+      operationId: POST_SaleInvoices_Finalize
+      parameters:
+        - name: id
+          in: path
+          description: Draft invoice ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleInvoices/MarkAsPaid:
+    post:
+      tags:
+        - SaleInvoices
+      summary: Mark invoice as paid
+      operationId: POST_SaleInvoices_MarkAsPaid
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/PayInvoice"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PayInvoice"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/PayInvoice"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/PayInvoice"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleInvoices/Download/{id}:
+    get:
+      tags:
+        - SaleInvoices
+      summary: Download the invoice as a PDF file
+      operationId: GET_SaleInvoices_Download
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleInvoices/Send/{id}:
+    post:
+      tags:
+        - SaleInvoices
+      summary: Send an invoice
+      operationId: POST_SaleInvoices_Send
+      parameters:
+        - name: id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: Email addresses
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+          text/json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleQuotes:
+    get:
+      tags:
+        - SaleQuotes
+      summary: List quotes
+      operationId: GET_SaleQuotes_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: From
+          in: query
+          description: From
+          schema:
+            type: string
+            format: date
+        - name: To
+          in: query
+          description: To
+          schema:
+            type: string
+            format: date
+        - name: CustomerId
+          in: query
+          description: Customer ID
+          schema:
+            type: integer
+            format: int32
+        - name: Status.From
+          in: query
+          description: From
+          schema:
+            type: string
+            format: date
+        - name: Status.To
+          in: query
+          description: To
+          schema:
+            type: string
+            format: date
+        - name: Status.CustomerId
+          in: query
+          description: Customer ID
+          schema:
+            type: integer
+            format: int32
+        - name: Status.Status.From
+          in: query
+          description: From
+          schema:
+            type: string
+            format: date
+        - name: Status.Status.To
+          in: query
+          description: To
+          schema:
+            type: string
+            format: date
+        - name: Status.Status.CustomerId
+          in: query
+          description: Customer ID
+          schema:
+            type: integer
+            format: int32
+        - name: Status.Status.Status
+          in: query
+          description: Status
+          schema:
+            $ref: "#/components/schemas/SaleQuoteQueryFilter"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quote"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quote"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quote"
+    post:
+      tags:
+        - SaleQuotes
+      summary: Create a new quote
+      operationId: POST_SaleQuotes_Post
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Quote"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Quote"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Quote"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Quote"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Quote"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quote"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Quote"
+  /v1/SaleQuotes/{id}:
+    get:
+      tags:
+        - SaleQuotes
+      summary: Get an quote by ID
+      operationId: GET_SaleQuotes_Get
+      parameters:
+        - name: id
+          in: path
+          description: Quote ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Quote"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quote"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Quote"
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Error"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - SaleQuotes
+      summary: Delete a quote
+      operationId: DELETE_SaleQuotes_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Quote ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "400":
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleQuotes/Find:
+    get:
+      tags:
+        - SaleQuotes
+      summary: Find quotes
+      operationId: GET_SaleQuotes_Find
+      parameters:
+        - name: internalId
+          in: query
+          description: Quote internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quote"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quote"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quote"
+  /v1/SaleQuotes/Download/{id}:
+    get:
+      tags:
+        - SaleQuotes
+      summary: Download the quote as a PDF file
+      operationId: GET_SaleQuotes_Download
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/SaleQuotes/Send/{id}:
+    post:
+      tags:
+        - SaleQuotes
+      summary: Send an quote
+      operationId: POST_SaleQuotes_Send
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+          text/json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Settings:
+    get:
+      tags:
+        - Settings
+      summary: Get settings
+      operationId: GET_Settings_Get
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+  /v1/Suppliers:
+    get:
+      tags:
+        - Suppliers
+      summary: List suppliers
+      operationId: GET_Suppliers_List
+      parameters:
+        - name: PageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: OrderBy
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: query (full text search)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supplier"
+    post:
+      tags:
+        - Suppliers
+      summary: Create a new supplier
+      operationId: POST_Suppliers_Post
+      requestBody:
+        description: Supplier to create
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/Suppliers/Find:
+    get:
+      tags:
+        - Suppliers
+      summary: Find a customer by email
+      operationId: GET_Suppliers_Find
+      parameters:
+        - name: email
+          in: query
+          description: Supplier email
+          schema:
+            type: string
+        - name: internalId
+          in: query
+          description: Supplier internal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supplier"
+  /v1/Suppliers/GetByInternalId/{internalId}:
+    get:
+      tags:
+        - Suppliers
+      summary: Find a single supplier by its internal ID
+      operationId: GET_Suppliers_GetByInternalId
+      parameters:
+        - name: internalId
+          in: path
+          description: Supplier internal ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+  /v1/Suppliers/{id}:
+    get:
+      tags:
+        - Suppliers
+      summary: Get a supplier by ID
+      operationId: GET_Suppliers_Get
+      parameters:
+        - name: id
+          in: path
+          description: Supplier id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Suppliers
+      summary: Update a supplier
+      operationId: PUT_Suppliers_Update
+      parameters:
+        - name: id
+          in: path
+          description: Supplier ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Suppliers
+      summary: Delete a supplier
+      operationId: DELETE_Suppliers_Delete
+      parameters:
+        - name: id
+          in: path
+          description: Supplier id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Suppliers/{id}/contacts:
+    get:
+      tags:
+        - Suppliers
+      summary: Get supplier contacts
+      operationId: GET_Suppliers_GetContacts
+      parameters:
+        - name: id
+          in: path
+          description: Supplier id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ThirdContact"
+  /v1/Units:
+    get:
+      tags:
+        - Units
+      summary: List all units
+      operationId: GET_Units_List
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Unit"
+  /v1/Users/me:
+    get:
+      tags:
+        - Users
+      summary: User
+      operationId: GET_Users_GetMe
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Users/whoami:
+    get:
+      tags:
+        - Users
+      summary: User
+      operationId: GET_Users_GetMe
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /v1/Vats:
+    get:
+      tags:
+        - Vats
+      summary: List all vats
+      operationId: GET_Vats_List
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vat"
+  /v1/Webhooks:
+    get:
+      tags:
+        - Webhooks
+      summary: List all webhooks
+      operationId: GET_Webhooks_List
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Webhook"
+    post:
+      tags:
+        - Webhooks
+      summary: Register a new webhook
+      operationId: POST_Webhooks_Post
+      requestBody:
+        description: ""
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: "#/components/schemas/Webhook"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Webhook"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/Webhook"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/Webhook"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Webhook"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Webhooks
+      summary: Unregister a webhook
+      operationId: DELETE_Webhooks_Delete
+      parameters:
+        - name: id
+          in: query
+          description: Webhook ID
+          schema:
+            type: integer
+            format: int32
+        - name: url
+          in: query
+          description: Webhook URL
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Webhook"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+components:
+  schemas:
+    AccountingSettingsDto:
+      type: object
+      properties:
+        accountNumberLength:
+          type: integer
+          format: int32
+        customerAccountFormat:
+          type: string
+          nullable: true
+        customerCollectiveAccount:
+          type: string
+          nullable: true
+        expensesImportVatReverseAccountNumber:
+          type: string
+          nullable: true
+        expensesJournalCode:
+          type: string
+          nullable: true
+        expensesSubcontractingVatReverseAccountNumber:
+          type: string
+          nullable: true
+        feesAccountingAccountNumber:
+          type: string
+          nullable: true
+        generateCustomerAccount:
+          type: boolean
+        generateSupplierAccount:
+          type: boolean
+        miscJournalCode:
+          type: string
+          nullable: true
+        salesDepositAccountingAccountNumber:
+          type: string
+          nullable: true
+        salesJournalCode:
+          type: string
+          nullable: true
+        salesShippingAccountNumber:
+          type: string
+          nullable: true
+        salesVatCollectionAccountingAccountNumber:
+          type: string
+          nullable: true
+        supplierAccountFormat:
+          type: string
+          nullable: true
+        supplierCollectiveAccount:
+          type: string
+          nullable: true
+        uncertainAccountNumberRoot:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AddressFields:
+      type: object
+      properties:
+        city:
+          type: string
+          nullable: true
+        countryIso:
+          type: string
+          nullable: true
+        countryName:
+          type: string
+          nullable: true
+          readOnly: true
+        formattedAddress:
+          type: string
+          nullable: true
+          readOnly: true
+        inlineAddress:
+          type: string
+          nullable: true
+          readOnly: true
+        street:
+          type: string
+          nullable: true
+        zipcode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BankProvider:
+      type: object
+      properties:
+        countryCodes:
+          type: array
+          items:
+            type: string
+          description: Bank provider country codes
+          nullable: true
+        id:
+          type: string
+          description: Bank provider Id
+          nullable: true
+        logoUri:
+          type: string
+          description: Bank provider logo URI
+          nullable: true
+        markets:
+          type: array
+          items:
+            type: string
+          description: Bank provider markets
+          nullable: true
+        name:
+          type: string
+          description: Bank provider name
+          nullable: true
+      additionalProperties: false
+      description: Bank provider
+    BillingOptions:
+      type: object
+      properties:
+        allowed:
+          type: boolean
+          description: Allowed
+          nullable: true
+        bankAccountId:
+          type: integer
+          description: Bank account ID
+          format: int32
+          nullable: true
+        buyerReference:
+          type: string
+          description: Buyer reference
+          nullable: true
+        colleagueId:
+          type: integer
+          description: Colleague ID
+          format: int32
+          nullable: true
+        discount:
+          $ref: "#/components/schemas/Discount"
+        initialCommitmentAmount:
+          type: number
+          description: Intial commitment amount
+          format: double
+          nullable: true
+        initialCommitmentDate:
+          type: string
+          description: Initial commitment date
+          format: date
+          nullable: true
+        initialCommitmentStatus:
+          $ref: "#/components/schemas/CommitmentStatus"
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        sendDocumentAsAttachment:
+          type: boolean
+          description: Send document as attachment
+          nullable: true
+        settlementTermId:
+          type: integer
+          description: Settlement term ID
+          format: int32
+          nullable: true
+        useTaxIncludedPrices:
+          type: boolean
+          description: Use tax included prices
+          nullable: true
+        vatReverseCharge:
+          type: boolean
+          description: Indicates VAT should be included in sales
+          nullable: true
+        vendorReference:
+          type: string
+          description: Vendor reference. Used to be print on sales
+          nullable: true
+      additionalProperties: false
+      description: Billing options
+    Classification:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+          description: Account number
+          nullable: true
+          readOnly: true
+        defaultVat:
+          $ref: "#/components/schemas/Vat"
+        description:
+          type: string
+          description: Description
+          nullable: true
+          readOnly: true
+        id:
+          type: integer
+          description: Classification ID
+          format: int32
+        isProduct:
+          type: boolean
+          description: Indicates whether classification is product (should be defined when
+            type is 'Sale')
+          readOnly: true
+        isService:
+          type: boolean
+          description: Indicates whether classification is service (should be defined when
+            type is 'Sale')
+          readOnly: true
+        label:
+          type: string
+          description: Label
+          nullable: true
+          readOnly: true
+        microBusinessDeclarationType:
+          $ref: "#/components/schemas/MicroBusinessDeclarationTypes"
+        type:
+          $ref: "#/components/schemas/ClassificationType"
+      additionalProperties: false
+      description: Classification
+    ClassificationDto:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+          nullable: true
+        defaultVat:
+          $ref: "#/components/schemas/VatDto"
+        defaultVatId:
+          type: integer
+          format: int32
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        isProduct:
+          type: boolean
+        isService:
+          type: boolean
+        label:
+          type: string
+          nullable: true
+        metadatas:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        microBusinessDeclarationType:
+          $ref: "#/components/schemas/MicroBusinessDeclarationTypes"
+        type:
+          $ref: "#/components/schemas/ClassificationType"
+      additionalProperties: false
+    ClassificationType:
+      enum:
+        - Sale
+        - Expense
+        - Other
+      type: string
+    Colleague:
+      type: object
+      properties:
+        cellPhone:
+          type: string
+          description: Cell phone number
+          nullable: true
+        email:
+          type: string
+          description: Email
+          nullable: true
+        firstName:
+          type: string
+          description: First name
+          nullable: true
+        homecareServiceNumber:
+          type: string
+          description: Homecare service number associated with the colleague
+          nullable: true
+        id:
+          type: integer
+          description: Colleague Id
+          format: int32
+        initialPartnerBalance:
+          type: number
+          description: Initial balance for the partner
+          format: double
+        internalId:
+          type: string
+          description: Internal identifier for the colleague
+          nullable: true
+        isPartner:
+          type: boolean
+          description: Indicates if the colleague is a partner
+        lastName:
+          type: string
+          description: Last name
+          nullable: true
+        metadatas:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata associated with the colleague
+          nullable: true
+        name:
+          type: string
+          description: Colleague Name
+          nullable: true
+        number:
+          type: string
+          description: Colleague Number
+          nullable: true
+        phone:
+          type: string
+          description: Phone number
+          nullable: true
+        title:
+          type: string
+          description: Title
+          nullable: true
+        userId:
+          type: string
+          description: User identifier associated with the colleague
+          nullable: true
+      additionalProperties: false
+      description: Colleague
+    Commitment:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Gets the total amount of the commitment.
+          format: double
+          readOnly: true
+        date:
+          type: string
+          description: Gets the date of the commitment.
+          format: date
+          readOnly: true
+        dueAmount:
+          type: number
+          description: Gets the amount that is due for the commitment.
+          format: double
+          readOnly: true
+        id:
+          type: integer
+          description: Gets the unique identifier for the commitment.
+          format: int32
+          readOnly: true
+        thirdId:
+          type: number
+          description: Gets the identifier of the third party associated with the
+            commitment.
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: Represents a financial commitment with associated details such as
+        date, amount, due amount, and third party identifier.
+    CommitmentStatus:
+      enum:
+        - Unpaid
+        - Paid
+        - PartiallyPaid
+        - Balanced
+      type: string
+    CompanyInfo:
+      type: object
+      properties:
+        effectiveElectronicAddress:
+          type: string
+          nullable: true
+        electronicAddress:
+          type: string
+          nullable: true
+        siret:
+          type: string
+          nullable: true
+        vatNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CompanyInfoLinkProvider:
+      enum:
+        - Pappers
+        - Infogreffe
+        - Manageo
+        - Verif
+      type: string
+    CompanySettingsDto:
+      type: object
+      properties:
+        ape:
+          type: string
+          nullable: true
+        businessName:
+          type: string
+          nullable: true
+        capital:
+          type: number
+          format: double
+          nullable: true
+        cgaMember:
+          type: boolean
+        contact:
+          $ref: "#/components/schemas/ContactFields"
+        electronicAddress:
+          type: string
+          nullable: true
+        emailLogoUri:
+          type: string
+          nullable: true
+        guarantees:
+          type: string
+          nullable: true
+        headOfficeAddress:
+          $ref: "#/components/schemas/AddressFields"
+        invoicingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        isMicroBusiness:
+          type: boolean
+        legalMentions:
+          type: string
+          nullable: true
+        legalStatus:
+          type: string
+          nullable: true
+        logoUri:
+          type: string
+          nullable: true
+        mediator:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        registrationNumber:
+          type: string
+          nullable: true
+        reportLogoUri:
+          type: string
+          nullable: true
+        siret:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          nullable: true
+        urlCompanyName:
+          type: string
+          nullable: true
+        useInvoicingAddressAsHeadOfficeAddress:
+          type: boolean
+        vatNumber:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ConditionType:
+      enum:
+        - Net
+        - EndMonth
+      type: string
+    Contact:
+      type: object
+      properties:
+        cellPhone:
+          type: string
+          nullable: true
+        companyName:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        function:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          description: Contact ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in your system
+          nullable: true
+        invertedDisplayName:
+          type: string
+          nullable: true
+          readOnly: true
+        lastName:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        service:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+      description: Contact
+    ContactFields:
+      type: object
+      properties:
+        cellPhone:
+          type: string
+          nullable: true
+        companyName:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        function:
+          type: string
+          nullable: true
+        invertedDisplayName:
+          type: string
+          nullable: true
+          readOnly: true
+        lastName:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        service:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ContactNameDisplay:
+      enum:
+        - LastNameFirstName
+        - FirstNameLastName
+      type: string
+    Credit:
+      type: object
+      properties:
+        balance:
+          type: number
+          description: Balance
+          format: double
+          readOnly: true
+        billingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        billingContact:
+          $ref: "#/components/schemas/ContactFields"
+        cancelledInvoicetId:
+          type: integer
+          description: Invoice ID which this credit cancelled
+          format: int32
+          nullable: true
+          readOnly: true
+        cancelledInvoicetNumber:
+          type: string
+          description: Invoice number which this credit cancelled
+          nullable: true
+          readOnly: true
+        commitments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Commitment"
+          description: Commitments
+          nullable: true
+          readOnly: true
+        customerElectronicAddress:
+          type: string
+          description: Customer electronic address
+          nullable: true
+        customerId:
+          type: integer
+          description: Customer ID
+          format: int32
+          nullable: true
+        customerName:
+          type: string
+          description: Customer name
+          nullable: true
+        customerNumber:
+          type: string
+          description: Customer number
+          nullable: true
+        customerOrderReference:
+          type: string
+          description: Customer order reference
+          nullable: true
+        customerSiret:
+          type: string
+          description: Customer SIRET
+          nullable: true
+        customerType:
+          $ref: "#/components/schemas/CustomerType"
+        customerVatNumber:
+          type: string
+          description: Customer VAT number
+          nullable: true
+        date:
+          type: string
+          description: Date
+          format: date
+          nullable: true
+        footerNotes:
+          type: string
+          description: Footer notes to be print
+          nullable: true
+        globalDiscount:
+          $ref: "#/components/schemas/Discount"
+        grossTaxExcludedAmount:
+          type: number
+          description: Gross tax excluded amount
+          format: double
+          readOnly: true
+        headerNotes:
+          type: string
+          description: Header notes to be print
+          nullable: true
+        id:
+          type: integer
+          description: Invoice ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in your system
+          nullable: true
+        internalNotes:
+          type: string
+          description: Internal notes
+          nullable: true
+        isDraft:
+          type: boolean
+          description: Indicates whether invoice is draft. Otherwise invoice cannot be
+            modified
+          readOnly: true
+        isPaid:
+          type: boolean
+          description: Indicates whether invoice is paid
+          readOnly: true
+        liableToVat:
+          type: boolean
+          description: Indicates whether the document is liable to VAT
+          nullable: true
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/SaleDocumentLine"
+          description: Invoice lines
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+        overdue:
+          type: number
+          description: Overdue
+          format: double
+          readOnly: true
+        pdfUrl:
+          type: string
+          description: Pdf url
+          nullable: true
+          readOnly: true
+        publicLink:
+          type: string
+          description: Public link
+          nullable: true
+        region:
+          $ref: "#/components/schemas/VatRegion"
+        sentAt:
+          type: string
+          description: Sent at
+          format: date-time
+          nullable: true
+          readOnly: true
+        shippingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        shippingAmount:
+          type: number
+          description: Shipping amount
+          format: double
+        shippingContact:
+          $ref: "#/components/schemas/ContactFields"
+        shippingVat:
+          $ref: "#/components/schemas/Vat"
+        subject:
+          type: string
+          description: Subject
+          nullable: true
+        taxAmount:
+          type: number
+          description: Total tax amount
+          format: double
+          readOnly: true
+        taxExcludedAmount:
+          type: number
+          description: Tax excluded amount (discount included)
+          format: double
+          readOnly: true
+        taxIncludedAmount:
+          type: number
+          description: Tax included amount
+          format: double
+          readOnly: true
+        useTaxIncludedPrices:
+          type: boolean
+          description: Indicates whether invoice prices and amount are tax included
+        vatMode:
+          $ref: "#/components/schemas/VatMode"
+        vatNote:
+          type: string
+          description: VAT note to print
+          nullable: true
+        vatReverseCharge:
+          type: boolean
+          description: VAT reverse charge
+        vats:
+          type: array
+          items:
+            $ref: "#/components/schemas/VatSummary"
+          description: Vats
+          nullable: true
+          readOnly: true
+        vendorReference:
+          type: string
+          description: Vendor reference to be print
+          nullable: true
+      additionalProperties: false
+      description: Credit
+    CreditSettingsDto:
+      type: object
+      properties:
+        validityDuration:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    Customer:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Active
+        billingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        billingOptions:
+          $ref: "#/components/schemas/BillingOptions"
+        cellPhone:
+          type: string
+          description: Cell phone number
+          nullable: true
+        companyInformations:
+          $ref: "#/components/schemas/CompanyInfo"
+        companyName:
+          type: string
+          description: Company name
+          nullable: true
+        email:
+          type: string
+          description: Email
+          nullable: true
+        family:
+          $ref: "#/components/schemas/CustomerFamily"
+        firstName:
+          type: string
+          description: First name
+          nullable: true
+        id:
+          type: integer
+          description: Customer ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in information system
+          nullable: true
+        internalNotes:
+          type: string
+          description: Internal notes
+          nullable: true
+        lastName:
+          type: string
+          description: Last name
+          nullable: true
+        name:
+          type: string
+          description: Name
+          nullable: true
+          readOnly: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+        phone:
+          type: string
+          description: Phone number
+          nullable: true
+        shippingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        title:
+          type: string
+          description: Title
+          nullable: true
+        type:
+          $ref: "#/components/schemas/CustomerType"
+      additionalProperties: false
+      description: Customer
+    CustomerFamily:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: Internal ID
+          nullable: true
+        label:
+          type: string
+          description: Label
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+      additionalProperties: false
+      description: Customer family
+    CustomerType:
+      enum:
+        - Business
+        - Consumer
+        - Government
+      type: string
+    DelayType:
+      enum:
+        - Days
+        - Months
+      type: string
+    Discount:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/DiscountType"
+        value:
+          type: number
+          format: double
+      additionalProperties: false
+    DiscountType:
+      enum:
+        - Percent
+        - Fixed
+      type: string
+    EmailAttachmentDto:
+      type: object
+      properties:
+        fileId:
+          type: integer
+          format: int32
+        fileName:
+          type: string
+          nullable: true
+        fileSize:
+          type: number
+          format: double
+      additionalProperties: false
+    EmailCreditSettingsDto:
+      type: object
+      properties:
+        defaultAttachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailAttachmentDto"
+          nullable: true
+        defaultBccEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultCcEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultContentTemplate:
+          type: string
+          nullable: true
+        defaultObjectTemplate:
+          type: string
+          nullable: true
+        includeDocumentAttachment:
+          type: boolean
+        showAmount:
+          type: boolean
+      additionalProperties: false
+    EmailHomecareServiceSettingsDto:
+      type: object
+      properties:
+        defaultAttachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailAttachmentDto"
+          nullable: true
+        defaultBccEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultCcEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultContentTemplate:
+          type: string
+          nullable: true
+        defaultObjectTemplate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EmailInvoiceSettingsDto:
+      type: object
+      properties:
+        defaultAttachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailAttachmentDto"
+          nullable: true
+        defaultBccEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultCcEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultContentTemplate:
+          type: string
+          nullable: true
+        defaultObjectTemplate:
+          type: string
+          nullable: true
+        includeDocumentAttachment:
+          type: boolean
+        showAmount:
+          type: boolean
+      additionalProperties: false
+    EmailQuoteSettingsDto:
+      type: object
+      properties:
+        defaultAttachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailAttachmentDto"
+          nullable: true
+        defaultBccEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultCcEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultContentTemplate:
+          type: string
+          nullable: true
+        defaultObjectTemplate:
+          type: string
+          nullable: true
+        includeDocumentAttachment:
+          type: boolean
+        showAmount:
+          type: boolean
+      additionalProperties: false
+    EmailReminderSettingsDto:
+      type: object
+      properties:
+        defaultAttachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailAttachmentDto"
+          nullable: true
+        defaultBccEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultCcEmails:
+          type: array
+          items:
+            type: string
+          nullable: true
+        defaultContentTemplate:
+          type: string
+          nullable: true
+        defaultObjectTemplate:
+          type: string
+          nullable: true
+        includeDocumentAttachment:
+          type: boolean
+      additionalProperties: false
+    EmailStyleSettingsDto:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+          nullable: true
+        foreColor:
+          type: string
+          nullable: true
+        headerBackgroundColor:
+          type: string
+          nullable: true
+        headerForeColor:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EmailingSettingsDto:
+      type: object
+      properties:
+        credits:
+          $ref: "#/components/schemas/EmailCreditSettingsDto"
+        homecareServices:
+          $ref: "#/components/schemas/EmailHomecareServiceSettingsDto"
+        invoices:
+          $ref: "#/components/schemas/EmailInvoiceSettingsDto"
+        quotes:
+          $ref: "#/components/schemas/EmailQuoteSettingsDto"
+        reminders:
+          $ref: "#/components/schemas/EmailReminderSettingsDto"
+        style:
+          $ref: "#/components/schemas/EmailStyleSettingsDto"
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+          description: List of error messages
+          nullable: true
+        message:
+          type: string
+          description: Error message
+          nullable: true
+      additionalProperties: false
+      description: Error
+    ExpenseStatus:
+      enum:
+        - Done
+        - Pending
+        - Paid
+      type: string
+    GeneralSettingsDto:
+      type: object
+      properties:
+        companyInfoLinkProvider:
+          $ref: "#/components/schemas/CompanyInfoLinkProvider"
+        contactDisplayFormat:
+          $ref: "#/components/schemas/ContactNameDisplay"
+        ipLinkProvider:
+          $ref: "#/components/schemas/IPLinkProvider"
+        mapLinkProvider:
+          $ref: "#/components/schemas/MapLinkProvider"
+        timezone:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Hello:
+      type: object
+      properties:
+        apiKeyName:
+          type: string
+          description: API key name
+          nullable: true
+        companyName:
+          type: string
+          description: Company name
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        serverTimestamp:
+          type: string
+          description: Server timestamp
+          format: date-time
+        url:
+          type: string
+          description: Name
+          nullable: true
+      additionalProperties: false
+      description: Hello
+    IPLinkProvider:
+      enum:
+        - IPInfo
+        - DBIP
+        - IPData
+        - IPGeolocation
+      type: string
+    Invoice:
+      type: object
+      properties:
+        balance:
+          type: number
+          description: Balance
+          format: double
+          readOnly: true
+        billingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        billingContact:
+          $ref: "#/components/schemas/ContactFields"
+        cancellationCreditId:
+          type: integer
+          description: Credit ID which cancel this invoice
+          format: int32
+          nullable: true
+          readOnly: true
+        cancellationCreditNumber:
+          type: string
+          description: Credit number which cancel this invoice
+          nullable: true
+          readOnly: true
+        commitments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Commitment"
+          description: Commitments
+          nullable: true
+          readOnly: true
+        customerElectronicAddress:
+          type: string
+          description: Customer electronic address
+          nullable: true
+        customerId:
+          type: integer
+          description: Customer ID
+          format: int32
+          nullable: true
+        customerName:
+          type: string
+          description: Customer name
+          nullable: true
+        customerNumber:
+          type: string
+          description: Customer number
+          nullable: true
+        customerOrderReference:
+          type: string
+          description: Customer order reference
+          nullable: true
+        customerSiret:
+          type: string
+          description: Customer SIRET
+          nullable: true
+        customerType:
+          $ref: "#/components/schemas/CustomerType"
+        customerVatNumber:
+          type: string
+          description: Customer VAT number
+          nullable: true
+        date:
+          type: string
+          description: Date
+          format: date
+          nullable: true
+        footerNotes:
+          type: string
+          description: Footer notes to be print
+          nullable: true
+        globalDiscount:
+          $ref: "#/components/schemas/Discount"
+        grossTaxExcludedAmount:
+          type: number
+          description: Gross tax excluded amount
+          format: double
+          readOnly: true
+        headerNotes:
+          type: string
+          description: Header notes to be print
+          nullable: true
+        id:
+          type: integer
+          description: Invoice ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in your system
+          nullable: true
+        internalNotes:
+          type: string
+          description: Internal notes
+          nullable: true
+        isCancelled:
+          type: boolean
+          description: Indicates whether invoice is cancelled
+          readOnly: true
+        isDraft:
+          type: boolean
+          description: Indicates whether invoice is draft. Otherwise invoice cannot be
+            modified
+          readOnly: true
+        isPaid:
+          type: boolean
+          description: Indicates whether invoice is paid
+          readOnly: true
+        isProforma:
+          type: boolean
+          description: Indicates whether invoice is proforma
+          readOnly: true
+        liableToVat:
+          type: boolean
+          description: Indicates whether the document is liable to VAT
+          nullable: true
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/SaleDocumentLine"
+          description: Invoice lines
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+        overdue:
+          type: number
+          description: Overdue
+          format: double
+          readOnly: true
+        pdfUrl:
+          type: string
+          description: Pdf url
+          nullable: true
+          readOnly: true
+        publicLink:
+          type: string
+          description: Public link
+          nullable: true
+        region:
+          $ref: "#/components/schemas/VatRegion"
+        replacedBy:
+          type: integer
+          description: Replacement invoice ID
+          format: int32
+          nullable: true
+          readOnly: true
+        sentAt:
+          type: string
+          description: Sent at
+          format: date-time
+          nullable: true
+          readOnly: true
+        shippingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        shippingAmount:
+          type: number
+          description: Shipping amount
+          format: double
+        shippingContact:
+          $ref: "#/components/schemas/ContactFields"
+        shippingVat:
+          $ref: "#/components/schemas/Vat"
+        subject:
+          type: string
+          description: Subject
+          nullable: true
+        taxAmount:
+          type: number
+          description: Total tax amount
+          format: double
+          readOnly: true
+        taxExcludedAmount:
+          type: number
+          description: Tax excluded amount (discount included)
+          format: double
+          readOnly: true
+        taxIncludedAmount:
+          type: number
+          description: Tax included amount
+          format: double
+          readOnly: true
+        useTaxIncludedPrices:
+          type: boolean
+          description: Indicates whether invoice prices and amount are tax included
+        vatMode:
+          $ref: "#/components/schemas/VatMode"
+        vatNote:
+          type: string
+          description: VAT note to print
+          nullable: true
+        vatReverseCharge:
+          type: boolean
+          description: VAT reverse charge
+        vats:
+          type: array
+          items:
+            $ref: "#/components/schemas/VatSummary"
+          description: Vats
+          nullable: true
+          readOnly: true
+        vendorReference:
+          type: string
+          description: Vendor reference to be print
+          nullable: true
+      additionalProperties: false
+      description: Invoice
+    InvoiceSettingsDto:
+      type: object
+      properties:
+        collectionCosts:
+          type: string
+          nullable: true
+        earlyFinalizationDuration:
+          type: integer
+          format: int32
+          nullable: true
+        latePaymentPenalty:
+          type: string
+          nullable: true
+        substractDepositFromTaxExcludedAmount:
+          type: boolean
+      additionalProperties: false
+    InvoiceStatusFilter:
+      enum:
+        - Draft
+        - Incoming
+        - Expired
+        - Paid
+        - ToSend
+      type: string
+    LineType:
+      enum:
+        - Empty
+        - Product
+        - Service
+        - Subtotal
+        - Text
+        - NewPage
+      type: string
+      description: Line type
+    MapLinkProvider:
+      enum:
+        - GoogleMaps
+        - BingMaps
+        - OpenStreetMap
+      type: string
+    MicroBusinessDeclarationTypes:
+      enum:
+        - Products
+        - Services
+        - OtherServices
+        - Renting
+        - Cipav
+      type: string
+    PayInvoice:
+      type: object
+      properties:
+        allowUpdate:
+          type: boolean
+          description: "Indicates whether update can be done if invoice already paid.\r
+
+            Can update metadata, status and payment reference"
+        amount:
+          type: number
+          description: Amount to pay
+          format: double
+          nullable: true
+        date:
+          type: string
+          description: Paid date
+          format: date
+        finalizeInvoice:
+          type: boolean
+          description: Indicates whether the invoice has to be finalized if draft
+        invoiceId:
+          type: integer
+          description: Invoice ID
+          format: int32
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata
+          nullable: true
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        paymentReference:
+          type: string
+          description: Payment reference
+          nullable: true
+        status:
+          $ref: "#/components/schemas/PaymentStatus"
+      additionalProperties: false
+      description: Pay invoice
+    PaymentMethod:
+      enum:
+        - Transfer
+        - Order
+        - Check
+        - Cash
+        - Card
+        - Bill
+        - Usec
+        - Other
+      type: string
+    PaymentStatus:
+      enum:
+        - Success
+        - Pending
+        - Failed
+      type: string
+      description: Receipt Status
+    ProblemDetails:
+      type: object
+      properties:
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    Product:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Indicates whether the product is active
+        defaultQuantity:
+          type: number
+          description: Default quantity
+          format: double
+        description:
+          type: string
+          description: Description
+          nullable: true
+        family:
+          $ref: "#/components/schemas/ProductFamily"
+        id:
+          type: integer
+          description: Product ID
+          format: int32
+          readOnly: true
+        imageUrl:
+          type: string
+          description: Gets the product image URL
+          nullable: true
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in your system
+          nullable: true
+        internalNotes:
+          type: string
+          description: Internal notes
+          nullable: true
+        isUnitPriceTaxIncluded:
+          type: boolean
+          description: Indicates whether unit price include vat
+        name:
+          type: string
+          description: Name
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+        purchasePrice:
+          type: number
+          description: Purchase price
+          format: double
+        type:
+          $ref: "#/components/schemas/ProductType"
+        unit:
+          $ref: "#/components/schemas/Unit"
+        unitPrice:
+          type: number
+          description: Unit price
+          format: double
+        vat:
+          $ref: "#/components/schemas/Vat"
+      additionalProperties: false
+      description: Product
+    ProductFamily:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID
+          format: int32
+          readOnly: true
+        label:
+          type: string
+          description: Label
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+      additionalProperties: false
+      description: Product family
+    ProductType:
+      enum:
+        - Product
+        - Service
+        - Text
+      type: string
+    PurchaseInvoice:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date
+          format: date
+        id:
+          type: integer
+          description: Expense ID
+          format: int32
+          readOnly: true
+        notes:
+          type: string
+          description: Notes
+          nullable: true
+        pdfUrl:
+          type: string
+          description: Pdf url
+          nullable: true
+          readOnly: true
+        reference:
+          type: string
+          description: Reference
+          nullable: true
+        region:
+          $ref: "#/components/schemas/VatRegion"
+        status:
+          $ref: "#/components/schemas/ExpenseStatus"
+        subject:
+          type: string
+          description: Subject
+          nullable: true
+        supplier:
+          $ref: "#/components/schemas/Supplier"
+        taxIncludedAmount:
+          type: number
+          description: Tax included amount
+          format: double
+        vatReverseCharge:
+          type: boolean
+          description: Vat reverse charge
+      additionalProperties: false
+      description: Purchase invoice
+    Quote:
+      type: object
+      properties:
+        acceptedAt:
+          type: string
+          description: Accepted date
+          format: date-time
+          nullable: true
+        balance:
+          type: number
+          description: Balance
+          format: double
+          readOnly: true
+        billingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        billingContact:
+          $ref: "#/components/schemas/ContactFields"
+        customerElectronicAddress:
+          type: string
+          description: Customer electronic address
+          nullable: true
+        customerId:
+          type: integer
+          description: Customer ID
+          format: int32
+          nullable: true
+        customerName:
+          type: string
+          description: Customer name
+          nullable: true
+        customerNumber:
+          type: string
+          description: Customer number
+          nullable: true
+        customerOrderReference:
+          type: string
+          description: Customer order reference
+          nullable: true
+        customerSiret:
+          type: string
+          description: Customer SIRET
+          nullable: true
+        customerType:
+          $ref: "#/components/schemas/CustomerType"
+        customerVatNumber:
+          type: string
+          description: Customer VAT number
+          nullable: true
+        date:
+          type: string
+          description: Date
+          format: date
+          nullable: true
+        deposit:
+          $ref: "#/components/schemas/Discount"
+        footerNotes:
+          type: string
+          description: Footer notes to be print
+          nullable: true
+        globalDiscount:
+          $ref: "#/components/schemas/Discount"
+        grossTaxExcludedAmount:
+          type: number
+          description: Gross tax excluded amount
+          format: double
+          readOnly: true
+        headerNotes:
+          type: string
+          description: Header notes to be print
+          nullable: true
+        id:
+          type: integer
+          description: Invoice ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in your system
+          nullable: true
+        internalNotes:
+          type: string
+          description: Internal notes
+          nullable: true
+        liableToVat:
+          type: boolean
+          description: Indicates whether the document is liable to VAT
+          nullable: true
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/SaleDocumentLine"
+          description: Invoice lines
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+        pdfUrl:
+          type: string
+          description: Pdf url
+          nullable: true
+          readOnly: true
+        publicLink:
+          type: string
+          description: Public link
+          nullable: true
+        refusedAt:
+          type: string
+          description: Refused date
+          format: date-time
+          nullable: true
+        region:
+          $ref: "#/components/schemas/VatRegion"
+        sentAt:
+          type: string
+          description: Sent at
+          format: date-time
+          nullable: true
+          readOnly: true
+        shippingAddress:
+          $ref: "#/components/schemas/AddressFields"
+        shippingAmount:
+          type: number
+          description: Shipping amount
+          format: double
+        shippingContact:
+          $ref: "#/components/schemas/ContactFields"
+        shippingVat:
+          $ref: "#/components/schemas/Vat"
+        status:
+          $ref: "#/components/schemas/QuoteStatus"
+        subject:
+          type: string
+          description: Subject
+          nullable: true
+        taxAmount:
+          type: number
+          description: Total tax amount
+          format: double
+          readOnly: true
+        taxExcludedAmount:
+          type: number
+          description: Tax excluded amount (discount included)
+          format: double
+          readOnly: true
+        taxIncludedAmount:
+          type: number
+          description: Tax included amount
+          format: double
+          readOnly: true
+        useTaxIncludedPrices:
+          type: boolean
+          description: Indicates whether invoice prices and amount are tax included
+        validityDate:
+          type: string
+          description: Validity date
+          format: date
+          nullable: true
+        vatNote:
+          type: string
+          description: VAT note to print
+          nullable: true
+        vatReverseCharge:
+          type: boolean
+          description: VAT reverse charge
+        vats:
+          type: array
+          items:
+            $ref: "#/components/schemas/VatSummary"
+          description: Vats
+          nullable: true
+          readOnly: true
+        vendorReference:
+          type: string
+          description: Vendor reference to be print
+          nullable: true
+      additionalProperties: false
+      description: Quote
+    QuoteSettingsDto:
+      type: object
+      properties:
+        depositDefaultValue:
+          type: number
+          format: double
+        validityDuration:
+          type: integer
+          format: int32
+      additionalProperties: false
+    QuoteStatus:
+      enum:
+        - Pending
+        - Accepted
+        - Refused
+        - Closed
+        - Sent
+        - Invoiced
+      type: string
+    Receipt:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount
+          format: double
+        customerId:
+          type: integer
+          description: Customer ID
+          format: int32
+          nullable: true
+        customerInternalId:
+          type: string
+          description: Customer number
+          nullable: true
+        customerName:
+          type: string
+          description: Customer name
+          nullable: true
+          readOnly: true
+        customerNumber:
+          type: string
+          description: Customer number
+          nullable: true
+        date:
+          type: string
+          description: Date
+          format: date
+        id:
+          type: integer
+          description: ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: Internal ID
+          nullable: true
+        links:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReceiptLink"
+          description: Links used to mark documents as paid
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata
+          nullable: true
+        notes:
+          type: string
+          description: Notes
+          nullable: true
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        reference:
+          type: string
+          description: Reference
+          nullable: true
+        status:
+          $ref: "#/components/schemas/PaymentStatus"
+      additionalProperties: false
+      description: Receipt
+    ReceiptLink:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount
+          format: double
+          nullable: true
+        id:
+          type: integer
+          description: Linked document ID
+          format: int32
+        type:
+          $ref: "#/components/schemas/ReceiptLinkType"
+      additionalProperties: false
+      description: ReceiptLink
+    ReceiptLinkType:
+      enum:
+        - Commitment
+        - Invoice
+        - Credit
+      type: string
+      description: Receipt Link type
+    RefundCredit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount to pay
+          format: double
+          nullable: true
+        creditId:
+          type: integer
+          description: Invoice ID
+          format: int32
+        date:
+          type: string
+          description: Paid date
+          format: date
+        finalizeCredit:
+          type: boolean
+          description: Indicates whether the invoice has to be finalized if draft
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata
+          nullable: true
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        refundReference:
+          type: string
+          description: Payment reference
+          nullable: true
+        status:
+          $ref: "#/components/schemas/PaymentStatus"
+      additionalProperties: false
+      description: Pay invoice
+    SaleDocumentLine:
+      type: object
+      properties:
+        classificationId:
+          type: integer
+          description: Classification ID (used if no product is set)
+          format: int32
+          nullable: true
+        date:
+          type: string
+          description: Date
+          format: date
+          nullable: true
+        description:
+          type: string
+          description: Description (can be html)
+          nullable: true
+        discount:
+          $ref: "#/components/schemas/Discount"
+        id:
+          type: integer
+          description: Invoice line ID
+          format: int32
+          readOnly: true
+        marginAmount:
+          type: number
+          description: Margin amount
+          format: double
+        marginRate:
+          type: number
+          description: Margin rate
+          format: double
+        product:
+          $ref: "#/components/schemas/Product"
+        productId:
+          type: integer
+          description: Product ID
+          format: int32
+          nullable: true
+        productInternalId:
+          type: string
+          description: Product internal ID
+          nullable: true
+        productNumber:
+          type: string
+          description: Product number
+          nullable: true
+        purchasePrice:
+          type: number
+          description: Purchase price
+          format: double
+          nullable: true
+        quantity:
+          type: number
+          description: Quantity
+          format: double
+          nullable: true
+        taxExcludedAmount:
+          type: number
+          description: Tax excluded amount
+          format: double
+          nullable: true
+          readOnly: true
+        taxExcludedPrice:
+          type: number
+          description: Tax excluded price
+          format: double
+          nullable: true
+        taxIncludedAmount:
+          type: number
+          description: Tax included amount
+          format: double
+          nullable: true
+          readOnly: true
+        taxIncludedPrice:
+          type: number
+          description: Tax included price
+          format: double
+          nullable: true
+        type:
+          $ref: "#/components/schemas/LineType"
+        unit:
+          $ref: "#/components/schemas/Unit"
+        vat:
+          $ref: "#/components/schemas/Vat"
+      additionalProperties: false
+      description: Invoice line
+    SaleQuoteQueryFilter:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          description: Customer ID
+          format: int32
+          nullable: true
+        from:
+          type: string
+          description: From
+          format: date
+          nullable: true
+        status:
+          $ref: "#/components/schemas/SaleQuoteQueryFilter"
+        to:
+          type: string
+          description: To
+          format: date
+          nullable: true
+      additionalProperties: false
+      description: Sale quote filter
+    SalesSettingsDto:
+      type: object
+      properties:
+        allowInlineDate:
+          type: boolean
+        btoBSettlementTerm:
+          $ref: "#/components/schemas/SettlementTermDto"
+        btoBSettlementTermId:
+          type: integer
+          format: int32
+          nullable: true
+        btoCSettlementTerm:
+          $ref: "#/components/schemas/SettlementTermDto"
+        btoCSettlementTermId:
+          type: integer
+          format: int32
+          nullable: true
+        credits:
+          $ref: "#/components/schemas/CreditSettingsDto"
+        defaultProductClassification:
+          $ref: "#/components/schemas/ClassificationDto"
+        defaultServiceClassification:
+          $ref: "#/components/schemas/ClassificationDto"
+        defaultShippingClassification:
+          $ref: "#/components/schemas/ClassificationDto"
+        generalTermsFile:
+          $ref: "#/components/schemas/SharedFileDto"
+        generalTermsFileId:
+          type: integer
+          format: int32
+          nullable: true
+        invoices:
+          $ref: "#/components/schemas/InvoiceSettingsDto"
+        mainActivity:
+          $ref: "#/components/schemas/ProductType"
+        marginRate:
+          type: number
+          format: double
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        quotes:
+          $ref: "#/components/schemas/QuoteSettingsDto"
+        useTaxIncluded:
+          type: boolean
+        vatReverseCharge:
+          type: boolean
+      additionalProperties: false
+    Settings:
+      type: object
+      properties:
+        accounting:
+          $ref: "#/components/schemas/AccountingSettingsDto"
+        company:
+          $ref: "#/components/schemas/CompanySettingsDto"
+        emailing:
+          $ref: "#/components/schemas/EmailingSettingsDto"
+        general:
+          $ref: "#/components/schemas/GeneralSettingsDto"
+        sales:
+          $ref: "#/components/schemas/SalesSettingsDto"
+        socials:
+          $ref: "#/components/schemas/Socials"
+        vat:
+          $ref: "#/components/schemas/VatSettingsDto"
+      additionalProperties: false
+      description: Application Settings
+    SettlementTermConditionDto:
+      type: object
+      properties:
+        dayOfMonth:
+          type: integer
+          format: int32
+          nullable: true
+        delay:
+          type: integer
+          format: int32
+        delayType:
+          $ref: "#/components/schemas/DelayType"
+        id:
+          type: integer
+          format: int32
+        percent:
+          type: number
+          format: double
+        type:
+          $ref: "#/components/schemas/ConditionType"
+      additionalProperties: false
+    SettlementTermDto:
+      type: object
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SettlementTermConditionDto"
+          nullable: true
+        id:
+          type: integer
+          format: int32
+        isCustom:
+          type: boolean
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SharedFileDto:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+        externalLinkHash:
+          type: string
+          nullable: true
+        fileName:
+          type: string
+          nullable: true
+        folderId:
+          type: integer
+          format: int32
+          nullable: true
+        id:
+          type: integer
+          format: int32
+        metadatas:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        size:
+          type: number
+          format: double
+        system:
+          type: boolean
+        uploadedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+    Socials:
+      type: object
+      properties:
+        facebook:
+          type: string
+          nullable: true
+        instagram:
+          type: string
+          nullable: true
+        linkedIn:
+          type: string
+          nullable: true
+        pinterest:
+          type: string
+          nullable: true
+        twitter:
+          type: string
+          nullable: true
+        youtube:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Supplier:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/AddressFields"
+        cellPhone:
+          type: string
+          description: Cell phone number
+          nullable: true
+        companyInformations:
+          $ref: "#/components/schemas/CompanyInfo"
+        createdAt:
+          type: string
+          description: Created date
+          format: date-time
+          nullable: true
+        createdById:
+          type: string
+          description: Created by user ID
+          nullable: true
+        defaultPaymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        email:
+          type: string
+          description: Email
+          nullable: true
+        firstName:
+          type: string
+          description: First name
+          nullable: true
+        id:
+          type: integer
+          description: Supplier ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: Internal Id
+          nullable: true
+        internalNotes:
+          type: string
+          description: Internal notes
+          nullable: true
+        lastName:
+          type: string
+          description: Last name
+          nullable: true
+        name:
+          type: string
+          description: Company name
+          nullable: true
+        number:
+          type: string
+          description: Number
+          nullable: true
+        phone:
+          type: string
+          description: Phone number
+          nullable: true
+        title:
+          type: string
+          description: Title
+          nullable: true
+        updatedAt:
+          type: string
+          description: Updated date
+          format: date-time
+          nullable: true
+        updatedById:
+          type: string
+          description: Updated by user ID
+          nullable: true
+      additionalProperties: false
+      description: Supplier
+    ThirdContact:
+      type: object
+      properties:
+        cellPhone:
+          type: string
+          nullable: true
+        companyName:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        function:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          description: Contact ID
+          format: int32
+          readOnly: true
+        internalId:
+          type: string
+          description: ID used in your system
+          nullable: true
+        invertedDisplayName:
+          type: string
+          nullable: true
+          readOnly: true
+        isMain:
+          type: boolean
+          description: Indicates if the contact is the main third contact
+        lastName:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        service:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+      description: Third contact
+    Unit:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code
+          nullable: true
+        conversion:
+          type: number
+          description: Conversion
+          format: double
+          readOnly: true
+        decimals:
+          type: number
+          description: Decimals
+          format: double
+          nullable: true
+          readOnly: true
+        id:
+          type: integer
+          description: Unit Id
+          format: int32
+          nullable: true
+          readOnly: true
+        name:
+          type: string
+          description: Name
+          nullable: true
+          readOnly: true
+        type:
+          $ref: "#/components/schemas/UnitType"
+      additionalProperties: false
+      description: Unit
+    UnitType:
+      enum:
+        - Time
+        - Weight
+        - Area
+        - Volume
+        - Dimension
+        - Other
+      type: string
+    User:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: Display name
+          nullable: true
+        email:
+          type: string
+          description: E-mail
+          nullable: true
+        firstName:
+          type: string
+          description: First name
+          nullable: true
+        lastName:
+          type: string
+          description: Last name
+          nullable: true
+        phone:
+          type: string
+          description: Phone
+          nullable: true
+        profile:
+          $ref: "#/components/schemas/UserProfile"
+        status:
+          $ref: "#/components/schemas/UserStatus"
+        userId:
+          type: string
+          description: User Id
+          nullable: true
+      additionalProperties: false
+      description: User
+    UserProfile:
+      enum:
+        - Admin
+        - Standard
+        - Accountant
+        - Support
+        - Api
+        - Unknown
+      type: string
+    UserStatus:
+      enum:
+        - Inactive
+        - InvitationSent
+        - Active
+        - Unknown
+      type: string
+    Vat:
+      type: object
+      properties:
+        default:
+          type: boolean
+          description: Indicatess if this is the default VAT for the region
+          readOnly: true
+        id:
+          type: integer
+          description: Vat ID
+          format: int32
+          nullable: true
+          readOnly: true
+        label:
+          type: string
+          description: Label
+          nullable: true
+          readOnly: true
+        rate:
+          type: number
+          description: Rate
+          format: double
+          nullable: true
+        region:
+          $ref: "#/components/schemas/VatRegion"
+      additionalProperties: false
+      description: Vat
+    VatDeclarationPeriodicity:
+      enum:
+        - Monthly
+        - Quarterly
+        - Annually
+      type: string
+    VatDto:
+      type: object
+      properties:
+        default:
+          type: boolean
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        rate:
+          type: number
+          format: double
+          nullable: true
+        region:
+          $ref: "#/components/schemas/VatRegion"
+      additionalProperties: false
+    VatMode:
+      enum:
+        - Auto
+        - Debit
+        - Collection
+      type: string
+    VatRegion:
+      enum:
+        - FR
+        - EU
+        - IE
+        - DOM
+        - Corse
+        - Monaco
+      type: string
+    VatSettingsDto:
+      type: object
+      properties:
+        liableToVat:
+          type: boolean
+        nonLiableTextToPrint:
+          type: string
+          nullable: true
+        vatMode:
+          $ref: "#/components/schemas/VatMode"
+        vatPeriod:
+          $ref: "#/components/schemas/VatDeclarationPeriodicity"
+      additionalProperties: false
+    VatSummary:
+      type: object
+      properties:
+        taxExcludedAmount:
+          type: number
+          description: Tax excluded amount
+          format: double
+        vat:
+          $ref: "#/components/schemas/Vat"
+        vatAmount:
+          type: number
+          description: Vat amount
+          format: double
+      additionalProperties: false
+      description: Vat summary
+    Webhook:
+      required:
+        - name
+        - types
+        - url
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Webhook ID
+          format: int32
+        name:
+          minLength: 1
+          type: string
+          description: Name
+        secretKey:
+          type: string
+          description: Secret key
+          nullable: true
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/WebhookType"
+          description: ""
+        url:
+          minLength: 1
+          type: string
+          description: Webhook Uri
+      additionalProperties: false
+      description: Wehbook
+    WebhookType:
+      enum:
+        - CustomerCreated
+        - InvoiceCreated
+        - CustomerDeleted
+        - CustomerUpdated
+        - ProductCreated
+        - ProductUpdated
+        - ProductDeleted
+        - InvoiceUpdated
+        - ContactUpdated
+        - ContactCreated
+        - QuoteUpdated
+        - QuoteCreated
+        - ContactDeleted
+        - QuoteDeleted
+        - InvoiceDeleted
+      type: string
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      description: 'API KEY generated in application. Example: "X-API-KEY: {apiKey}"'
+      name: X-API-KEY
+      in: header
+security:
+  - ApiKey: []
+tags:
+  - name: BankAccounts
+    description: Bank accounts API
+  - name: Classifications
+    description: Classifications API
+  - name: Colleagues
+    description: Colleagues API
+  - name: Contacts
+    description: Contacts API
+  - name: CustomerFamilies
+    description: Customers API
+  - name: Customers
+    description: Customers API
+  - name: Hello
+    description: User API
+  - name: ProductFamilies
+    description: Products API
+  - name: ProductImages
+    description: Product images API
+  - name: Products
+    description: Products API
+  - name: PurchaseInvoices
+    description: Purchase invoices API
+  - name: Receipts
+    description: Receipts API
+  - name: SaleCredits
+    description: Credits API
+  - name: SaleInvoices
+    description: Invoices API
+  - name: SaleQuotes
+    description: Quotes API
+  - name: Settings
+    description: Settings API
+  - name: Suppliers
+    description: Suppliers API
+  - name: Units
+    description: Units API
+  - name: Users
+    description: User API
+  - name: Vats
+    description: Vats API
+  - name: Webhooks
+    description: Classifications API
