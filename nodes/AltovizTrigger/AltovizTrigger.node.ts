@@ -7,8 +7,9 @@ import type {
   IWebhookResponseData,
 } from 'n8n-workflow';
 import { NodeConnectionTypes } from 'n8n-workflow';
+import { API_BASE_URL } from '../constants';
 
-const WEBHOOKS_ENDPOINT = 'https://api.altoviz.com/v1/Webhooks';
+const WEBHOOKS_ENDPOINT = `${API_BASE_URL}/v1/Webhooks`;
 
 export class AltovizTrigger implements INodeType {
   description: INodeTypeDescription = {
@@ -81,7 +82,7 @@ export class AltovizTrigger implements INodeType {
         typeOptions: { password: true },
         default: '',
         description:
-          'Optional secret used by Altoviz to sign payloads. If set, verify the X-Altoviz-Signature header in your workflow.',
+          'Optional secret used by Altoviz to sign payloads. If set, verify the X-Signature header in your workflow.',
       },
     ],
   };
@@ -189,7 +190,17 @@ export class AltovizTrigger implements INodeType {
   };
 
   async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-    const body = this.getBodyData() as { type?: string; data?: IDataObject };
+    const bodyData = this.getBodyData();
+
+    // Altoviz sends Content-Type: text/plain, so the body may arrive as a
+    // raw JSON string instead of a parsed object. Parse it if necessary.
+    let body: { id?: string; type?: string; data?: IDataObject };
+    if (typeof bodyData === 'string') {
+      body = JSON.parse(bodyData) as typeof body;
+    } else {
+      body = bodyData as typeof body;
+    }
+
     const output: IDataObject = {
       eventType: body.type ?? '',
       ...(body.data ?? {}),

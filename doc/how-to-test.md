@@ -96,6 +96,64 @@ npm run lint    # ESLint with n8n community-node rules
 
 Both `build` and `lint` must exit with code 0 before submitting a pull request.
 
+## 8. Testing webhooks (Altoviz Trigger node)
+
+The **Altoviz Trigger** node is a webhook-based trigger: when you activate a workflow that contains it, n8n registers a webhook with the Altoviz API (via `POST /v1/Webhooks`) and deregisters it when the workflow is deactivated (via `DELETE /v1/Webhooks`).
+
+### Exposing your local n8n to the internet
+
+Altoviz's servers must be able to reach the webhook URL that n8n generates. When running locally, `localhost:5678` is not publicly accessible, so you need a tunnel.
+
+Using [ngrok](https://ngrok.com/):
+
+```bash
+ngrok http 5678
+```
+
+Copy the public `https://…ngrok-free.app` URL and set the `WEBHOOK_URL` environment variable **before** starting n8n:
+
+```bash
+export WEBHOOK_URL=https://<your-subdomain>.ngrok-free.app
+n8n start
+```
+
+This tells n8n to advertise the public URL instead of `localhost` when registering webhooks.
+
+### Quick-testing with "Test workflow"
+
+1. Open a workflow containing the **Altoviz Trigger** node.
+2. Click **Test workflow** (or _Listen for test event_). n8n registers a _test_ webhook with Altoviz and starts listening.
+3. Trigger the event on Altoviz side (e.g. create a customer) — the trigger node receives the payload and n8n displays it.
+4. When you stop listening, n8n automatically deletes the test webhook.
+
+> **Tip:** If you stop listening before Altoviz sends the event, the test webhook may stay registered. Use the **Altoviz** (non-trigger) node with the **Webhook → List** operation to check for stale webhooks, then **Webhook → Delete** to clean them up.
+
+### Production-style testing
+
+1. **Activate** the workflow (toggle in the top-right corner). This registers a _production_ webhook.
+2. Trigger the event on the Altoviz side.
+3. Check the **Executions** tab to see the incoming payload and downstream results.
+4. **Deactivate** the workflow when finished — n8n calls `DELETE /v1/Webhooks` to remove the registration.
+
+### Cleaning up orphaned webhooks
+
+If n8n crashes or you kill it without deactivating the workflow, the webhook may remain registered on Altoviz. To list and remove orphaned webhooks:
+
+1. Add an **Altoviz** node → Resource: _Webhook_ → Operation: _List_.
+2. Execute to see all registered webhooks.
+3. Identify stale entries (e.g. URLs pointing to old ngrok subdomains).
+4. Use Operation: _Delete_ with the webhook `id` to remove them.
+
+Alternatively, call the API directly:
+
+```bash
+# List webhooks
+curl -H "X-API-Key: <YOUR_KEY>" https://api.altoviz.com/v1/Webhooks
+
+# Delete a webhook by id
+curl -X DELETE -H "X-API-Key: <YOUR_KEY>" "https://api.altoviz.com/v1/Webhooks?id=<WEBHOOK_ID>"
+```
+
 ## Troubleshooting
 
 | Symptom                               | Likely cause                            | Fix                                                                                      |

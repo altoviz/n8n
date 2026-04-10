@@ -5,6 +5,8 @@ import type {
   INodeProperties,
 } from 'n8n-workflow';
 
+import { API_BASE_URL } from '../nodes/constants';
+
 export class AltovizApi implements ICredentialType {
   name = 'altovizApi';
 
@@ -37,7 +39,7 @@ export class AltovizApi implements ICredentialType {
 
   test: ICredentialTestRequest = {
     request: {
-      baseURL: 'https://api.altoviz.com',
+      baseURL: API_BASE_URL,
       url: '/Hello',
       method: 'GET',
     },

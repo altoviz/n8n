@@ -22,10 +22,14 @@
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
 		"dev": "n8n-node dev",
+		"dev:staging": "ALTOVIZ_API_BASE_URL=https://api.altoviz.xyz WEBHOOK_URL=https://gx5sjlq1-5678.uks1.devtunnels.ms n8n start",
+		"dev:staging:watch": "n8n-node dev --external-n8n",
 		"lint": "n8n-node lint",
 		"lint:fix": "n8n-node lint --fix",
 		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
+		"prepublishOnly": "n8n-node prerelease",
+		"start": "n8n start",
+		"start:staging": "ALTOVIZ_API_BASE_URL=https://api.altoviz.xyz WEBHOOK_URL=https://gx5sjlq1-5678.uks1.devtunnels.ms n8n start"
 	},
 	"files": [
 		"dist",

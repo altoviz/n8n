@@ -1,6 +1,7 @@
 import type { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { NodeConnectionTypes } from 'n8n-workflow';
 
+import { API_BASE_URL } from '../constants';
 import {
   bankAccountFields,
   bankAccountOperations,
@@ -66,7 +67,7 @@ export class Altoviz implements INodeType {
       },
     ],
     requestDefaults: {
-      baseURL: 'https://api.altoviz.com',
+      baseURL: API_BASE_URL,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
