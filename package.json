@@ -18,6 +18,10 @@
 		"type": "git",
 		"url": "git+https://github.com/altoviz/n8n.git"
 	},
+	  "engines" : { 
+    "npm" : ">=11",
+    "node" : ">=22"
+  },
 	"scripts": {
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",

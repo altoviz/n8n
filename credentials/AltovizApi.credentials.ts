@@ -14,7 +14,7 @@ export class AltovizApi implements ICredentialType {
 
   icon = 'file:../icons/altoviz-logo.svg' as const;
 
-  documentationUrl = 'https://altoviz.com';
+  documentationUrl = 'https://support.altoviz.com/support/solutions/articles/101000580766-n8n';
 
   properties: INodeProperties[] = [
     {
