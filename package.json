@@ -1,6 +1,6 @@
 {
 	"name": "@altoviz/n8n-nodes-altoviz",
-	"version": "0.9.14",
+	"version": "0.9.15",
 	"description": "n8n community node for the Altoviz app",
 	"license": "MIT",
 	"homepage": "https://altoviz.com",
@@ -18,10 +18,10 @@
 		"type": "git",
 		"url": "git+https://github.com/altoviz/n8n.git"
 	},
-	  "engines" : { 
-    "npm" : ">=11",
-    "node" : ">=22"
-  },
+	"engines": {
+		"npm": ">=11",
+		"node": ">=22"
+	},
 	"scripts": {
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
