@@ -5,8 +5,9 @@ import type {
   INodeTypeDescription,
   IWebhookFunctions,
   IWebhookResponseData,
+  JsonObject,
 } from 'n8n-workflow';
-import { NodeConnectionTypes } from 'n8n-workflow';
+import { NodeApiError, NodeConnectionTypes } from 'n8n-workflow';
 import { API_BASE_URL } from '../constants';
 
 const WEBHOOKS_ENDPOINT = `${API_BASE_URL}/v1/Webhooks`;
@@ -126,8 +127,8 @@ export class AltovizTrigger implements INodeType {
             });
             delete webhookData.webhookId;
           }
-        } catch {
-          return false;
+        } catch (error) {
+          throw new NodeApiError(this.getNode(), error as unknown as JsonObject);
         }
         return false;
       },
@@ -179,8 +180,8 @@ export class AltovizTrigger implements INodeType {
               json: true,
             },
           );
-        } catch {
-          return false;
+        } catch (error) {
+          throw new NodeApiError(this.getNode(), error as unknown as JsonObject);
         }
 
         delete webhookData.webhookId;

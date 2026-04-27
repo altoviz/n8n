@@ -1,6 +1,6 @@
 {
 	"name": "@altoviz/n8n-nodes-altoviz",
-	"version": "0.1.0",
+	"version": "0.9.14",
 	"description": "n8n community node for the Altoviz app",
 	"license": "MIT",
 	"homepage": "https://altoviz.com",
@@ -24,8 +24,9 @@
 		"dev": "n8n-node dev",
 		"dev:staging": "ALTOVIZ_API_BASE_URL=https://api.altoviz.xyz WEBHOOK_URL=https://gx5sjlq1-5678.uks1.devtunnels.ms n8n start",
 		"dev:staging:watch": "n8n-node dev --external-n8n",
-		"lint": "n8n-node lint",
-		"lint:fix": "n8n-node lint --fix",
+		"lint": "node scripts/patch-eslint-compat.mjs && n8n-node lint",
+		"lint:community": "eslint --config eslint.community.config.mjs nodes/ credentials/ package.json",
+		"lint:fix": "node scripts/patch-eslint-compat.mjs && n8n-node lint --fix",
 		"release": "n8n-node release",
 		"prepublishOnly": "n8n-node prerelease",
 		"start": "n8n start",
@@ -47,13 +48,14 @@
 		]
 	},
 	"devDependencies": {
-		"@n8n/node-cli": "*",
-		"eslint": "9.32.0",
-		"prettier": "3.6.2",
-		"release-it": "^19.0.4",
+		"@n8n/eslint-plugin-community-nodes": "^0.12.0",
+		"@n8n/node-cli": "^0.27.0",
+		"eslint": "10.2.1",
+		"prettier": "3.8.3",
+		"release-it": "^20.0.1",
 		"typescript": "5.9.2"
 	},
 	"peerDependencies": {
-		"n8n-workflow": "*"
+		"n8n-workflow": "^2.16.0"
 	}
 }
